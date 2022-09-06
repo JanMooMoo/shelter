@@ -9,7 +9,7 @@ import HydroLoader from '../Loaders/HydroLoader';
 import Web3 from 'web3';
 
 
-import {KadenaRegistration_ABI, KadenaRegistration_Address} from '../../config/KadenaRegistration';
+import {Kadena_ABI, Kadena_Address} from '../../config/Kadena';
 
 
 class AdminPage extends Component
@@ -52,20 +52,20 @@ class AdminPage extends Component
    
     const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));    
     
-    const Kadena  =  new web3.eth.Contract(KadenaRegistration_ABI, KadenaRegistration_Address);
+    const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
     const blockNumber = await web3.eth.getBlockNumber();
-
     if (this._isMounted){
         this.setState({Kadena});
         this.setState({blocks:blockNumber - 50000});
         this.setState({latestblocks:blockNumber - 1});
-      }
+      }    
+
 
     
-        Kadena.events.RegistrationRequest({fromBlock:5000000, toBlock:'latest'})
-        .on('data',(log)=>{
+      
+      Kadena.events.Register({fromBlock:10022501, toBlock:'latest'}).on('data',(log)=>{
+
         this.setState({Registration:[...this.state.Registration,log]})
-console.log(log)
         var newest = this.state.Registration
         var newsort= newest.concat().sort((a,b)=> b.blockNumber- a.blockNumber);
 
@@ -77,14 +77,13 @@ console.log(log)
   
     accept = (address) =>{
    
-        this.contracts['KadenaRegistration'].methods.register.cacheSend(address,true)
-        console.log("accept",address)
+        this.contracts['Shelter'].methods.approval.cacheSend(address,true)
       
     }
 
     decline = (address) =>{
     
-        this.contracts['KadenaRegistration'].methods.register.cacheSend(address,false)
+        this.contracts['Shelter'].methods.approval.cacheSend(address,false)
       
     }
 
@@ -110,7 +109,7 @@ console.log(log)
    }
    else{
     body = <div>{this.state.Registration.map((register,index)=>(
-        <p className="sold_text col-md-12" key={index}>{register.returnValues.owner}, "{register.returnValues.name}" Requested as a "{register.returnValues.entityType}"
+        <p className="sold_text col-md-12" key={index}>{register.returnValues.owner} requested as "{register.returnValues.name}" 
         from {register.returnValues.city},{register.returnValues.country} on {this.parseDate(register.returnValues.time)}
         
         <button className = "accept" onClick={()=>this.accept(register.returnValues.owner)}>Accept</button>
@@ -127,7 +126,7 @@ console.log(log)
 
 
       <br/><br />
-"
+
       <div>
 
 

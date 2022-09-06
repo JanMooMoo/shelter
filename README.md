@@ -43,5 +43,12 @@ The page will reload if you make edits.<br />
 * Infura Web3 API - Blockchain Connection    <br/>
 * Infura IPFS API - IPFS Pinning/Connection    <br/>
 * IPFS - Decentralized storage   <br/>
-* FLEEK - IPFS Web-Hosting    <br/>
+
+
+## Usage of Inter-planetary File System (IPFS)
+Shelter uses IPFS as its main file storage & rely heavily into it. Some of important details from the Core Functions of Shelter like REGISTRATION, CALL-FOR-HELP, & LEND-A-HAND are pinned & uploaded into the IPFS.
+This is to ensure that the data uploaded by the users of shelter are available anytime & anywhere. this includes all the photos, profile details, event photos & event descriptions.
+<br />
+![ReadPhoto](readphoto2.png)
+<br />
 
