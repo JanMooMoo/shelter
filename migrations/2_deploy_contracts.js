@@ -1,11 +1,7 @@
-var KadenaRegistration = artifacts.require("KadenaRegistration");
-var KadenaNeed= artifacts.require("KadenaNeed");
-var KadenaGive= artifacts.require("KadenaGive");
+var Shelter = artifacts.require("Shelter");
 
 
-module.exports = function(deployer) {
-	deployer.deploy(KadenaRegistration);
-	deployer.deploy(KadenaNeed);
-	deployer.deploy(KadenaGive);
-	
-};
+module.exports = function(deployer,network, accounts) {
+	deployer.deploy(Shelter,{from: accounts[0]});
+   };
+

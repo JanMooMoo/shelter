@@ -1,4 +1,4 @@
-export const Kadena_Address = '0xC7CDa21e8132ec2C1509436F3feb007a0F2fCF68';
+export const Kadena_Address = '0x7A2b265FD0e7dFE3e93B7ab2bcdae5a43dA23704';
 
 export const Kadena_ABI =   [
   {
@@ -80,7 +80,7 @@ export const Kadena_ABI =   [
       },
       {
         "indexed": false,
-        "name": "hospitalName",
+        "name": "name",
         "type": "string"
       },
       {
@@ -114,7 +114,7 @@ export const Kadena_ABI =   [
         "type": "bool"
       }
     ],
-    "name": "RegisterHospital",
+    "name": "Register",
     "type": "event"
   },
   {
@@ -179,7 +179,7 @@ export const Kadena_ABI =   [
       },
       {
         "indexed": false,
-        "name": "hospital",
+        "name": "name",
         "type": "string"
       },
       {
@@ -231,7 +231,7 @@ export const Kadena_ABI =   [
       },
       {
         "indexed": false,
-        "name": "hospital",
+        "name": "name",
         "type": "string"
       },
       {
@@ -437,7 +437,7 @@ export const Kadena_ABI =   [
     "constant": false,
     "inputs": [
       {
-        "name": "_hospitalName",
+        "name": "_name",
         "type": "string"
       },
       {
@@ -453,7 +453,7 @@ export const Kadena_ABI =   [
         "type": "string"
       }
     ],
-    "name": "registerHospital",
+    "name": "register",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -471,7 +471,7 @@ export const Kadena_ABI =   [
         "type": "bool"
       }
     ],
-    "name": "register",
+    "name": "approval",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -485,10 +485,10 @@ export const Kadena_ABI =   [
         "type": "address"
       }
     ],
-    "name": "getHospitalStatus",
+    "name": "getMemberStatus",
     "outputs": [
       {
-        "name": "_hospitalName",
+        "name": "_name",
         "type": "string"
       },
       {
