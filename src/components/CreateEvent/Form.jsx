@@ -22,13 +22,11 @@ class Form extends Component {
 			form_validation: [],
 
 			title: '',
-			entity:'Clinic',
 			description:'',
 			address:'',
 			contact:'',
-			country:'Japan',
+			country:'Belgium',
 			city:'',
-			website:'',
 			
 			dateDisplay:new Date(parseInt('1577952000', 10) * 1000)
 		}
@@ -68,13 +66,6 @@ class Form extends Component {
 		});
 	}
 
-	websiteChange = (event) => {
-		let website = event.target.value;
-		
-		this.setState({
-			website: website,
-		},()=>console.log());
-	}
 
 	//description
 	descriptionChange = (event) => {
@@ -120,15 +111,6 @@ class Form extends Component {
 		},()=>console.log);
 	}
 
-	//Entity
-	countryChange = (event) => {
-		let entity = event.target.value;
-
-		this.setState({
-			entity: entity
-		},()=>console.log);
-	}
-
 	//city
 	cityChange = (event) => {
 		let city = event.target.value;
@@ -144,13 +126,11 @@ class Form extends Component {
 
 		let form_validation = [];
 		if (this.state.title === '') form_validation.push('name');
-		if (this.state.entity === '') form_validation.push('entity');
 		if (this.state.country === '') form_validation.push('country');
 		if (this.state.city === '') form_validation.push('city');
 		if (this.form.address.value === '') form_validation.push('address');
 		if (this.form.description.value === '') form_validation.push('description');
 		if (this.form.contact.value === '') form_validation.push('contact');
-		if (this.state.website === '') form_validation.push('website');
 		if (this.state.wrong_file === true || this.state.file === null) form_validation.push('image');
 		
 		this.setState({
@@ -160,14 +140,12 @@ class Form extends Component {
 		if (form_validation.length === 0) {
 			this.props.registerHospital(
 				this.state.title,
-				this.state.entity,
 				this.state.country,
 				this.state.city,
 				this.state.address,
 				this.state.description,
 				this.state.contact,
-				this.state.website,
-				this.state.file
+				this.state.file,
 			);
 		}
 	}
@@ -180,12 +158,10 @@ class Form extends Component {
 
 		let warning = {
 			name: this.state.form_validation.indexOf('name') === -1 ? '' : 'is-invalid',
-			entity: this.state.form_validation.indexOf('entity') === -1 ? '' : 'is-invalid',
 			country: this.state.form_validation.indexOf('country') === -1 ? '' : 'is-invalid',
 			city: this.state.form_validation.indexOf('city') === -1 ? '' : 'is-invalid',
 			address: this.state.form_validation.indexOf('address') === -1 ? '' : 'is-invalid',
 			description: this.state.form_validation.indexOf('description') === -1 ? '' : 'is-invalid',
-			website: this.state.form_validation.indexOf('website') === -1 ? '' : 'is-invalid',
 			contact: this.state.form_validation.indexOf('contact') === -1 ? '' : 'is-invalid',
 			image: this.state.form_validation.indexOf('image') === -1 && !this.state.wrong_file ? '' : 'is-invalid',
 		};
@@ -203,38 +179,45 @@ class Form extends Component {
 
 		return (
 			<React.Fragment>
-			<div className="home-wrapper mb-5">		
+			<div className="home-wrapper mb-5 col-sm-12">		
 			<h2><i className="fa fa-edit"></i> Registration</h2>
 			</div>
-			<div className="row">
 			<div className="col col-xl-8 col-lg-8 col-md-12 col-sm-12">
 			<form>
 				
 				<div className="form-group">
-					<label htmlFor="name">Hospital Name:</label>
-					<input type="text" className={"form-control " + warning.name} id="name" title="Hospital Name" value={this.state.title} onChange={this.titleChange} autoComplete="off" />
+					<label htmlFor="name">Name:</label>
+					<input type="text" className={"form-control " + warning.name} id="name" title="Name" value={this.state.title} onChange={this.titleChange} autoComplete="off" />
 					<small className="form-text text-muted">{this.state.title_length}/80 characters available.</small>
-				</div>
-
-				<div className="form-group">
-					<label htmlFor="entity">Entity Type:</label>
-					<select className="form-control" id="entity" title="Entity Type" onChange={this.countryChange}>
-						<option value="Clinic" key="1">Clinic</option>
-						<option value="Government Body" key="4">Government Body</option>
-						<option value="Non Profit Organization" key="5">Non Profit Organization</option>
-						<option value="Private Hospital" key="2">Private Hospital</option>
-                        <option value="Public Hospital" key="3">Public Hospital</option>							
-					</select>
 				</div>
 				
 				<div className="form-group">
 					<label htmlFor="country">Country:</label>
 					<select className="form-control" id="country" title="country" onChange={this.countryChange}>
-						<option value="Japan" key="1">Japan</option>
-						<option value="Philippines" key="2">Philippines</option>
-                        <option value="Singapore" key="3">Singapore</option>
-                        <option value="South Korea" key="4">South Korea</option>
-						<option value="Thailand" key="5">Thailand</option>	
+						
+						<option value="Belgium" key="1">Belgium</option>
+						<option value="Canada" key="2">Canada</option>
+						<option value="Denmark" key="3">Denmark</option>
+						<option value="Finland" key="4">Finland</option>
+						<option value="France" key="5">France</option>
+						<option value="Germany" key="6">Germany</option>
+						<option value="Greece" key="7">Greece</option>
+						<option value="Japan" key="8">Japan</option>
+						<option value="Netherlands" key="9">Netherlands</option>
+						<option value="Norway" key="10">Norway</option>
+						<option value="Philippines" key="11">Philippines</option>
+						<option value="Poland" key="12">Poland</option>
+						<option value="Portugal" key="13">Portugal</option>
+						<option value="Romania" key="14">Romania</option>
+                        <option value="Singapore" key="15">Singapore</option>
+						<option value="South Korea" key="16">South Korea</option>
+						<option value="Spain" key="17">Spain</option>
+						<option value="Sweden" key="18">Sweden</option>
+						<option value="Thailand" key="19">Thailand</option>	
+						<option value="Ukraine" key="20">Ukraine</option>
+						<option value="United Kingdom" key="21">United Kingdom</option>
+						<option value="United States of America" key="22">United States of America</option>
+
 					</select>
 				</div>
 
@@ -245,14 +228,14 @@ class Form extends Component {
 
 				<div className="form-group">
 					<label htmlFor="address">Address:</label>
-					<textarea className={"form-control " + warning.address} id="address" title="Hospital Address" rows="5" ref={(input) => this.form.address = input} onChange={this.addressChange} autoComplete="off"></textarea>
+					<textarea className={"form-control " + warning.address} id="address" title="Address" rows="5" ref={(input) => this.form.address = input} onChange={this.addressChange} autoComplete="off"></textarea>
 					<small className="form-text text-muted">{this.state.address_length}/100 characters available.</small>
 				</div>
 
 				
 				<div className="form-group">
-					<label htmlFor="description">Hospital Description:</label>
-					<textarea className={"form-control " + warning.description} id="description" title="Hospital Description" rows="5" ref={(input) => this.form.description = input} onChange={this.descriptionChange} autoComplete="off"></textarea>
+					<label htmlFor="description">Description:</label>
+					<textarea className={"form-control " + warning.description} id="description" title="Description" rows="5" ref={(input) => this.form.description = input} onChange={this.descriptionChange} autoComplete="off"></textarea>
 					<small className="form-text text-muted">{this.state.description_length}/500 characters available.</small>
 				</div>
 
@@ -260,12 +243,6 @@ class Form extends Component {
 					<label htmlFor="contact">Contact:</label>
 					<input type="text" className={"form-control " + warning.contact} id="contact" title="contact info" ref={(input) => this.form.contact = input} onChange={this.contactChange} autoComplete="off" />
 					<small className="form-text text-muted">{this.state.contact_length}/100 characters available.</small>
-				</div>
-
-				<div className="form-group">
-					<label htmlFor="website">Website:</label>
-					<input type="text" className={"form-control " + warning.website} id="website" title="Website" value={this.state.website} onChange={this.websiteChange} autoComplete="off" />
-					<small className="form-text text-muted">SAMPLE: https://www.google.com/</small> <small className="form-text text-muted">Type "None" if you don't have a Website.</small>
 				</div>
 
 				<div className="form-group">
@@ -280,7 +257,7 @@ class Form extends Component {
 				<br />
 				{alert}
 				<br />
-				<button type="submit" className="btn btn-outline-dark" title="Register Hospital" onClick={this.handleForm} disabled={disabled}>Register Hospital</button>
+				<button type="submit" className="btn btn-outline-dark" title="Register" onClick={this.handleForm} disabled={disabled}>Register</button>
 
 			</form>
 			</div>
@@ -297,19 +274,16 @@ class Form extends Component {
 			</div>
 			
 			<ul className="list-group list-group-flush">
-			<li className="list-group-item-page"><strong>Hospital Name: {this.state.title}</strong>  </li>
-			<li className="list-group-item-page"><strong>Entity Type:</strong> {this.state.entity} </li>
+			<li className="list-group-item-page"><strong>Name: {this.state.title}</strong>  </li>
 			<li className="list-group-item-page"><strong>Country:</strong> {this.state.country} </li>
 			<li className="list-group-item-page"><strong>City:</strong> {this.state.city} </li>
 			<li className="list-group-item-page"><strong>Address:</strong> {this.state.address} </li>
 			<li className="list-group-item-page"><strong>Contact:</strong> {this.state.contact} </li>
-			<li className="list-group-item-page"><strong>Website:</strong><a href={this.state.website} target="blank"> {this.state.website}</a>  </li>
 			</ul>
 
 			<div className="card-footer-form text-muted text-center">
 				<button className="btnAlive" disabled=""> Profile</button>
 			</div>
-</div>
 </div>
 </div>
 </React.Fragment>

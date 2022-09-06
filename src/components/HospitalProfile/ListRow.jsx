@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import ipfs from '../../utils/ipfs';
 
 
-class HospitalRow extends Component {
+class ListRow extends Component {
 
     constructor(props, context) {
       super(props);
 		  this.contracts = context.drizzle.contracts;
-          this.hospital = this.contracts['KadenaRegistration'].methods.getHospitalStatus.cacheCall(this.props.organizer);
+          this.member= this.contracts['Shelter'].methods.getMemberStatus.cacheCall(this.props.organizer);
           this.state = {
 			  loading: false,
               loaded: false,
@@ -29,13 +29,13 @@ class HospitalRow extends Component {
 		if (
 			this.state.loaded === false &&
 			this.state.loading === false &&
-			typeof this.props.contracts['KadenaRegistration'].getHospitalStatus[this.hospital] !== 'undefined' &&
-			!this.props.contracts['KadenaRegistration'].getHospitalStatus[this.hospital].error
+			typeof this.props.contracts['Shelter'].getMemberStatus[this.member] !== 'undefined' &&
+			!this.props.contracts['Shelter'].getMemberStatus[this.member].error
 		) {
 			this.setState({
 				loading: true
 			}, () => {
-				ipfs.get(this.props.contracts['KadenaRegistration'].getHospitalStatus[this.hospital].value._ipfs).then((file) => {
+				ipfs.get(this.props.contracts['Shelter'].getMemberStatus[this.member].value._ipfs).then((file) => {
 					let data = JSON.parse(file[0].content.toString());
 					if (!this.isCancelled) {
 						this.setState({
@@ -86,7 +86,7 @@ class HospitalRow extends Component {
       	.map((s) => s.charAt(0).toUpperCase() + s.substring(1))
           .join(' ');
             
-          this.props.history.push("/hospital/"+pagetitle+"/"+this.props.organizer);
+          this.props.history.push("/member/"+pagetitle+"/"+this.props.organizer);
     }
 
 	getImage = () => {
@@ -101,31 +101,31 @@ class HospitalRow extends Component {
 			
 		let memberSince='Kadena Member Since: '
 
-		if (typeof this.props.contracts['KadenaRegistration'].getHospitalStatus[this.hospital] !== 'undefined') {
-			if (this.props.contracts['KadenaRegistration'].getHospitalStatus[this.hospital].error) {
-				body = <div className="text-center mt-5"><span role="img" aria-label="warning">🚨</span> Hospital Profile Not Found</div>;
+		if (typeof this.props.contracts['Shelter'].getMemberStatus[this.member] !== 'undefined') {
+			if (this.props.contracts['Shelter'].getMemberStatus[this.member].error) {
+				body = <div className="text-center mt-5"><span role="img" aria-label="warning">🚨</span> Profile Not Found</div>;
 			} else {
 				
-				let hospital_data = this.props.contracts['KadenaRegistration'].getHospitalStatus[this.hospital].value;
+				let member_data = this.props.contracts['Shelter'].getMemberStatus[this.member].value;
 				
 				let image = this.getImage();
                 let address = this.getAddress();
                 let stars = <div className="rating"><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>
 
-                let date = new Date(parseInt(hospital_data._time, 10) * 1000);
+                let date = new Date(parseInt(member_data._time, 10) * 1000);
                 let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
                 memberSince = months[date.getMonth()]+ ". " + date.getDate() + ", " + date.getFullYear() 
                 
                   
-                  if (hospital_data._rating < 20 ){
+                  if (member_data._rating < 20 ){
                     stars = <div className="rating"><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
-               else if (hospital_data._rating <= 25){
+               else if (member_data._rating <= 25){
                 stars = <div className="rating"> <i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
-                else if (hospital_data._rating <= 30){
+                else if (member_data._rating <= 30){
                     stars = <div className="rating"> <i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
-                else if (hospital_data._rating <= 35){
+                else if (member_data._rating <= 35){
                     stars = <div className="rating"><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
-                else if (hospital_data._rating <=40){
+                else if (member_data._rating <=40){
                     stars = <div className="rating"><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/></div>}
                 else {
                     stars = <div className="rating"> <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/></div>
@@ -134,15 +134,14 @@ class HospitalRow extends Component {
 		
 		 
 				body =
-					<tr className="cursor-pointer mt-2" onClick={()=>this.friendlyUrl(hospital_data._hospitalName)}>  
+					<tr className="cursor-pointer mt-2" onClick={()=>this.friendlyUrl(member_data._name)}>  
 						<td>{this.props.count + 1}.
 						<img src={image} className="list-img ml-2" alt="Profile"></img>
 
 					</td>        
-      				<td> {hospital_data._hospitalName}</td>
-					<td> {hospital_data._entityType}</td>
-	  				<td>{hospital_data._country}</td>
-	  				<td>{hospital_data._city}</td>
+      				<td> {member_data._name}</td>
+	  				<td>{member_data._country}</td>
+	  				<td>{member_data._city}</td>
 	  				<td>{address}</td>
 	  				<td>{stars}</td>
 	  				<td>{memberSince}</td>  
@@ -174,7 +173,7 @@ class HospitalRow extends Component {
 	}
 }
 
-HospitalRow.contextTypes = {
+ListRow.contextTypes = {
     drizzle: PropTypes.object
 }
 
@@ -186,5 +185,5 @@ const mapStateToProps = state => {
     };
 };
 
-const AppContainer = drizzleConnect(HospitalRow, mapStateToProps);
+const AppContainer = drizzleConnect(ListRow, mapStateToProps);
 export default AppContainer;

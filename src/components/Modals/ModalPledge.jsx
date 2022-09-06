@@ -39,7 +39,7 @@ constructor(props,context){
 }
 
 pledge = ()=>{
-    this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount)
+    this.contracts['Shelter'].methods.pledge.cacheSend(this.props.id,this.state.amount)
     }
   
   
@@ -75,7 +75,7 @@ pledge = ()=>{
         
       <Modal.Header className="modalpie" closeButton>
       <Modal.Title id="contained-modal-title-vcenter">
-        <div className="banana3">Pledge to {this.props.hospital}</div>
+        <div className="banana3">Pledge to {this.props.member}</div>
       </Modal.Title>
       </Modal.Header> 
         

@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 
 // Import dApp Components
 import HydroLoader from '../Loaders/HydroLoader';
-import HospitalRow from './HospitalRow';
+import ListRow from './ListRow';
 import Web3 from 'web3';
-import {KadenaRegistration_ABI, KadenaRegistration_Address} from '../../config/KadenaRegistration';
+import {Kadena_ABI, Kadena_Address} from '../../config/Kadena';
 
 
-class HospitalList extends Component
+class MemberList extends Component
 {
   constructor(props, context)
   {
@@ -22,7 +22,7 @@ class HospitalList extends Component
         loadingchain : true,
         active_length : '',
         Kadena:[],
-        registerdHospital:[],
+        registeredMember:[],
       };
 
 	    this.contracts = context.drizzle.contracts; 
@@ -34,7 +34,7 @@ class HospitalList extends Component
   async loadBlockchain(){
    
     const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
-    const Kadena  =  new web3.eth.Contract(KadenaRegistration_ABI, KadenaRegistration_Address);
+    const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
 		this.setState({Kadena:Kadena});
 		
     const blockNumber = await web3.eth.getBlockNumber();
@@ -51,20 +51,20 @@ class HospitalList extends Component
       var newest = events;
       var newsort= newest.concat().sort((a,b)=> 
       a.returnValues.registeredAs.localeCompare(b.returnValues.registeredAs));
-      this.setState({registerdHospital:newsort});
-      this.setState({active_length:this.state.registerdHospital.length})
+      this.setState({registeredMember:newsort});
+      this.setState({active_length:this.state.registeredMember.length})
       this.setState({loadingchain:false});}
      }).catch((err)=>console.error(err))
      
      
      this.state.Kadena.events.Registration({fromBlock: this.state.blockNumber, toBlock:'latest'})
     .on('data', (log) => setTimeout(()=> {
-    this.setState({registerdHospital:[...this.state.registerdHospital,log]});
-    var newest = this.state.registerdHospital
+    this.setState({registeredMember:[...this.state.registeredMember,log]});
+    var newest = this.state.registeredMember
     var newsort= newest.concat().sort((a,b)=>a.returnValues.registeredAs.localeCompare(b.returnValues.registeredAs));
 
-    this.setState({registerdHospital:newsort});
-    this.setState({active_length:this.state.registerdHospital.length})
+    this.setState({registeredMember:newsort});
+    this.setState({active_length:this.state.registeredMember.length})
      },10000))
     }
      
@@ -88,18 +88,17 @@ class HospitalList extends Component
                  <thead>
                 <tr>
                  <th>No.</th>
-                 <th>Entity Name</th>
-                 <th>Entity Type</th>
+                 <th>Member Name</th>
                  <th>Country</th>
                  <th>City</th>
                 <th>Address</th>
-	              <th>Rating</th>
+	              <th>Reputation</th>
                 <th>Member Since</th>
                 </tr>
               </thead>
               
               <tbody>
-              {this.state.registerdHospital.map((hospital,index)=> <HospitalRow key ={index} organizer = {hospital.returnValues.applicant} count={index} history = {this.props.history}/> )}   
+              {this.state.registeredMember.map((member,index)=> <ListRow key ={index} organizer = {member.returnValues.applicant} count={index} history = {this.props.history}/> )}   
               </tbody>
               </table>  
              </div>
@@ -115,7 +114,7 @@ class HospitalList extends Component
       <div>
 
         <div className="row row_mobile">
-        <h2 className="col-lg-10 col-md-9 col-sm-8"><i class="fas fa-hospital-alt "/> List of Hospitals</h2>
+        <h2 className="col-lg-10 col-md-9 col-sm-8"><i class="fas fa-users"></i> Shelter Members</h2>
         </div>
         <hr/>
 
@@ -149,7 +148,7 @@ class HospitalList extends Component
 
 }
 
-HospitalList.contextTypes = {
+MemberList.contextTypes = {
     drizzle: PropTypes.object
 }
 
@@ -161,5 +160,5 @@ const mapStateToProps = state =>
     };
 };
 
-const AppContainer = drizzleConnect(HospitalList, mapStateToProps);
+const AppContainer = drizzleConnect(MemberList, mapStateToProps);
 export default AppContainer;

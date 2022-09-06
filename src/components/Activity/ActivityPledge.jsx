@@ -50,7 +50,13 @@ class ActivityPledge extends Component {
       	.map((s) => s.charAt(0).toUpperCase() + s.substring(1))
           .join(' ');
             
-          window.location.href = "/hospital/"+pagetitle+"/"+EthAddress;
+          //window.location.href = "/member/"+pagetitle+"/"+EthAddress;
+
+          window.open(
+            "/member/"+pagetitle+"/"+EthAddress,           
+            '_blank' // <- This is what makes it open in a new window.
+          );
+          
     }
 
 render(){
@@ -60,7 +66,7 @@ render(){
       <h5 className="spin mt-5 small"><i className="fas fa-spinner"></i></h5>
     </div>
     }
-    else if(this.state.commited.length === 0 && !this.state.loading){
+    else if(this.state.commited.length === 0 && !this.state.loading && this.state.commentView){
         body = <div style ={{textAlign:"center"}}>
             <h5 className="linkDisplay mt-5 small"><strong>No Activity</strong></h5>
         </div>

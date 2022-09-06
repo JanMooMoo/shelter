@@ -28,14 +28,12 @@ class CreateEvent extends Component {
 			newsNumber:null,
 			data: {
 				name: null,
-				entity: null,
 				country:null,
 				city:null,
 				address: null,
 				description:null,
 				contact:null,
-				website:null,
-				id:0
+				id:0,	
 			},
 
 			callForHelp:{
@@ -47,6 +45,7 @@ class CreateEvent extends Component {
 				minimum:0,
 				enddate:0,
 				remarks:null,
+				location:null,
 				id:0
 			},
 
@@ -59,7 +58,8 @@ class CreateEvent extends Component {
 				minimum:0,
 				enddate:0,
 				remarks:null,
-				id:0
+				location:null,
+				id:0,			
 			},
 			
 			help:false,
@@ -74,14 +74,16 @@ class CreateEvent extends Component {
 	}
 
 	
-	callForHelp = (title,category,item,amount,borrow,minimum,enddate,remarks,file,id) =>{
+	callForHelp = (title,category,item,amount,borrow,minimum,enddate,remarks,file,location,id) =>{
 		console.log("checking",title,category,item,amount,borrow,minimum,enddate,remarks)
+		console.log(file)
 		this.setState({
 			help:true,
 			upload: true,
 			redirect:false,
 			stage: 25,
 			title: 'Uploading event image...',
+			fileImg:file,
 			callForHelp: {
 				title:title,
 				category:category,
@@ -91,22 +93,24 @@ class CreateEvent extends Component {
 				minimum:minimum,
 				enddate:enddate,
 				remarks:remarks,
+				location:location,
 				id: parseInt(id, 10)
 			}
 		}, () => {
 			this.stageUpdater(90);
-			this.readFile(file);
+			this.readFile(this.state.fileImg);
 		});
 	}
 
-	lendAHand = (title,category,item,amount,borrow,minimum,enddate,remarks,file,id) =>{
-		console.log("checking",title,category,item,amount,borrow,minimum,enddate,remarks)
+	lendAHand = (title,category,item,amount,borrow,minimum,enddate,remarks,file,location,id) =>{
+		console.log("checking",title,category,item,amount,borrow,minimum,enddate,remarks,file,location,id)
 		this.setState({
 			lend:true,
 			upload: true,
 			redirect:false,
 			stage: 25,
 			title: 'Uploading event image...',
+			fileImg:file,
 			lendAHand: {
 				title:title,
 				category:category,
@@ -116,38 +120,38 @@ class CreateEvent extends Component {
 				minimum:minimum,
 				enddate:enddate,
 				remarks:remarks,
+				location:location,
 				id: parseInt(id, 10)
 			}
 		}, () => {
 			this.stageUpdater(90);
-			this.readFile(file);
+			this.readFile(this.state.fileImg);
 		});
 	}
 
 	
-	registerHospital = (name, entity, country, city, address, description, contact, website, file, id) => {
-		console.log(website)
+	registerHospital = (name, country, city, address,description, contact,file,id) => {
+		console.log(this.contracts)
 		this.setState({
 
 			upload: true,
 			redirect:false,
 			stage: 25,
 			title: 'Uploading event image...',
+			fileImg:file,
 			data: {
 				name: name,
-				entity:entity,
 				country: country,
 				city: city,
 				address: address,
 				description: description,
 				contact: contact,
-				website: website,
 
 				id: parseInt(id, 10)
 			}
 		}, () => {
 			this.stageUpdater(90);
-			this.readFile(file);
+			this.readFile(this.state.fileImg);
 		});
 	}
 
@@ -158,24 +162,31 @@ class CreateEvent extends Component {
 		console.log(file);
 		reader.readAsDataURL(file);
 		if(this.state.help === true){
-		reader.onloadend = () => this.uploadHelp(reader);	
+		reader.onloadend = () => setTimeout(()=>this.uploadHelp(reader),1000);	
+		console.log('reader',reader)
 		}
 		else if(this.state.lend === true){
 		reader.onloadend = () => this.uploadLend(reader);		
 		}
 		else{
-		reader.onloadend = () => this.convertAndUpload(reader);
+		reader.onloadend = () => setTimeout(()=>this.convertAndUpload(reader),1000);
 		}
 	}
 
 	uploadHelp = (reader) => {
 		let pinit = process.env.NODE_ENV === 'production';
 		let data = [];
-		if(this.state.help === true){
+		console.log(reader)
+
+		console.log(reader.result)
+		 if(this.state.help === true && reader.result !== null){
 			 data = JSON.stringify({
 				image: reader.result,
 				remarks: this.state.callForHelp.remarks,
+				location: this.state.callForHelp.location,
+
 		})}
+
 		
 		let buffer = Buffer.from(data);
 
@@ -185,7 +196,8 @@ class CreateEvent extends Component {
 				title: 'Creating transaction...',
 				ipfs: hash[0].hash
 			});
-			
+			console.log(this.state.ipfs)
+
 			this.transactionHelp();
 			 
 		}).catch((error) => {
@@ -199,10 +211,17 @@ class CreateEvent extends Component {
 	uploadLend = (reader) => {
 		let pinit = process.env.NODE_ENV === 'production';
 		let data = [];
+
+		console.log(reader)
+
+		console.log(reader.result)
+		
+
 		if(this.state.lend === true){
 			 data = JSON.stringify({
 				image: reader.result,
 				remarks: this.state.lendAHand.remarks,
+				location: this.state.lendAHand.location,
 		})}
 		
 		let buffer = Buffer.from(data);
@@ -213,7 +232,8 @@ class CreateEvent extends Component {
 				title: 'Creating transaction...',
 				ipfs: hash[0].hash
 			});
-			
+			console.log(this.state.ipfs)
+
 			this.transactionLend();
 			 
 		}).catch((error) => {
@@ -225,7 +245,8 @@ class CreateEvent extends Component {
 	};
 
 	transactionHelp = () => {
-		let id = this.contracts['KadenaNeed'].methods.callForHelp.cacheSend( 
+		console.log(this.state.ipfs)
+		let id = this.contracts['Shelter'].methods.callForHelp.cacheSend( 
 			   this.state.callForHelp.title,
 			   this.state.callForHelp.category,
 			   this.state.callForHelp.item,
@@ -240,7 +261,9 @@ class CreateEvent extends Component {
 	}
 
 	transactionLend = () => {
-		let id = this.contracts['KadenaGive'].methods.provideAssistance.cacheSend( 
+		console.log(this.state.ipfs)
+
+		let id = this.contracts['Shelter'].methods.provideAssistance.cacheSend( 
 			this.state.lendAHand.title,
 			this.state.lendAHand.category,
 			this.state.lendAHand.item,
@@ -264,8 +287,7 @@ class CreateEvent extends Component {
 			image: reader.result,
 			address: this.state.data.address,
 			description: this.state.data.description,
-			contact:this.state.data.contact,
-			website:this.state.data.website,
+			contact:this.state.data.contact
 		})
 		
 		let buffer = Buffer.from(data);
@@ -285,21 +307,18 @@ class CreateEvent extends Component {
 			this.setState({
 				error: true,
 				error_text: 'IPFS Error'
-			},()=>console.log("errrror"));
+			});
 		});
 	};
 
 	uploadRegistration = () => {
-		console.log("regier")
-		let id = this.contracts['KadenaRegistration'].methods.registerHospital.cacheSend(
+		let id = this.contracts['Shelter'].methods.register.cacheSend(
 			this.state.data.name,
-			this.state.data.entity,
 			this.state.data.country,
 			this.state.data.city,
 			this.state.ipfs)
 
 		this.transactionChecker(id)
-		console.log("direct")
 		//this.setRedirect();
 	}
 
@@ -310,10 +329,10 @@ class CreateEvent extends Component {
 	}
 
 	transactionChecker = (id) => {
+		console.log(this.state.ipfs)
+
 		let tx_checker = setInterval(() => {
 			let tx = this.props.transactionStack[id];
-			console.log(tx)
-			console.log(tx_checker)
 			if (typeof tx !== 'undefined') {
 				this.setState({
 					upload: false,
@@ -360,6 +379,7 @@ class CreateEvent extends Component {
 
 		let body =
 			this.state.upload ?
+			
 				<Loader progress={this.state.stage} text={this.state.title} /> :
 				<React.Fragment>
 					<div className="row">

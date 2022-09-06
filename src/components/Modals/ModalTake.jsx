@@ -41,7 +41,7 @@ constructor(props,context){
 }
 
 take = ()=>{
-    this.contracts['Kadena'].methods.take.cacheSend(this.props.id,this.state.amount)
+    this.contracts['Shelter'].methods.take.cacheSend(this.props.id,this.state.amount)
     }
   
   
@@ -78,7 +78,7 @@ take = ()=>{
         
       <Modal.Header className="modalpie" closeButton>
       <Modal.Title id="contained-modal-title-vcenter">
-        <div className="banana3">Take from {this.props.hospital}</div>
+        <div className="banana3">Take from {this.props.member}</div>
       </Modal.Title>
       </Modal.Header> 
         

@@ -49,7 +49,12 @@ class ReminderReturnPledge extends Component {
       	.map((s) => s.charAt(0).toUpperCase() + s.substring(1))
           .join(' ');
             
-          window.location.href = "/hospital/"+pagetitle+"/"+EthAddress;
+          //window.location.href = "/hospital/"+pagetitle+"/"+EthAddress;
+          
+          window.open(
+            "/member/"+pagetitle+"/"+EthAddress,           
+            '_blank'
+          );
     }
 
 

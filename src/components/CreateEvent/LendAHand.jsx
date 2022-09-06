@@ -24,19 +24,21 @@ class LendAHand extends Component {
 
 			title: '',
 			description:'',
-            category:"Equipment",
-            item:"Mask",
+            category:"basic",
+            item:"Food",
             amount:0,
-            return:'',
+            return:"false",
             minimum:0,
             endtime:'',
+
+			address:'',
             
-            equipment:["Hospital Bed","Mask","Personal Protective Equipment","COVID-19 Test Kit","COVID-19 Convalescent Plasma","Ventilator"],
-            blood:["Bloodtype A+","Bloodtype A-","Bloodtype B+","Bloodtype B-","Bloodtype O+","Bloodtype O-","Bloodtype AB+","Bloodtype AB-"],
-            organ:["Aortic Valve","Pulmonary Valve","Cornea","Liver","Kidney","Pancreas","Heart","Lung","Bone Marrow"],
-            staff:["Medical Surgical Nurse","Intensive Care Unit Nurse","Operating Room Nurse","Radiographers"],
-            medicine:["Astrophine Sulfate","Albendazole","Benzathine Penicillin","Cephalosporin","Epenephrine","Insulin","Prednisolone"],
-            event:["Seat","Speaker"],
+            basic:["Food", "Baby Food", "Shelter", "Milk", "Clean Water"],
+            essential:["Clothes For Men", "Clothes For Women", "Clothes For Children", "Clothes For Babies","Diapers", "Blankets", "Transportation"],
+            health:["Antibiotics","Bandages","Gloves","Mask","Stretcher","Vitamins & Supplements","Wipes"],
+            protection:["Power Banks", "Torches", "Flashlight", "Generator", "Body Armour", "Fire Resistant Clothes", "Helmet"],
+            human:["Medical Doctor", "Nurse", "Psychiatrist", "Psychologist", "Engineer", "Military", "Home Builder", "Web Programmer", "Cook", "Veterinarian", "Dentists"],
+			event:["Food", "Health & Medicine", "Rebuilding", "Relocation", "Fund Raising"], 
             
             dateDisplay:new Date(parseInt('1577952000', 10) * 1000),
             enddateDisplay:new Date(parseInt('1577952000', 10) * 1000)
@@ -89,6 +91,18 @@ class LendAHand extends Component {
 			description_length: description.length
 		});
 	}
+
+	addressChange = (event) => {
+		let address = event.target.value;
+		if (address.length > 50) {
+			address = address.slice(0, 50);
+		}
+		this.setState({
+			address: address,
+			address_length: address.length
+		});
+	}
+
 
 
     //amountChange
@@ -160,6 +174,8 @@ class LendAHand extends Component {
         if (this.state.return === '') form_validation.push('return');
         if (this.state.endtime === '') form_validation.push('End');
 		if (this.state.wrong_file === true || this.state.file === null) form_validation.push('image');
+		if (this.form.address.value === '') form_validation.push('address');
+
 		
 		this.setState({
 			form_validation: form_validation
@@ -176,6 +192,8 @@ class LendAHand extends Component {
                 this.state.endtime,
                 this.state.description,
 				this.state.file,
+				this.state.address
+
 			);
 		}
 	}
@@ -197,6 +215,7 @@ class LendAHand extends Component {
 			minAmount: this.state.form_validation.indexOf('minAmount') === -1 ? '' : 'is-invalid',
             endtime: this.state.form_validation.indexOf('End') === -1 ? '' : 'is-invalid',
             description:this.state.form_validation.indexOf('description') === -1 ? '' : 'is-invalid',
+			address:this.state.form_validation.indexOf('address') === -1 ? '' : 'is-invalid',
             image: this.state.form_validation.indexOf('image') === -1 && !this.state.wrong_file ? '' : 'is-invalid',
         };
 
@@ -224,32 +243,35 @@ class LendAHand extends Component {
 		
         let itemOption = ''
         
-        if (this.state.category === "Equipment"){
+		if (this.state.category === "basic"){
             itemOption = 
-            this.state.equipment.map((equipment,index)=>( <option value={equipment} key={index}>{equipment}</option>))}	
+            this.state.basic.sort((a,b)=>a.localeCompare(b)).map((basic,index)=>( <option value={basic} key={index}>{basic}</option>))}	
         
-        else if (this.state.category === "Medicine"){
-            itemOption = this.state.medicine.map((medicine,index)=>( <option value={medicine} key={index}>{medicine}</option>))        
+        else if (this.state.category === "essential"){
+            itemOption = this.state.essential.sort((a,b)=>a.localeCompare(b)).map((essential,index)=>( <option value={essential} key={index}>{essential}</option>))        
         }
-        else if (this.state.category === "Staff"){
-            itemOption = this.state.staff.map((staff,index)=>( <option value={staff} key={index}>{staff}</option>))        
+        else if (this.state.category === "health"){
+            itemOption = this.state.health.sort((a,b)=>a.localeCompare(b)).map((health,index)=>( <option value={health} key={index}>{health}</option>))        
         }
-        else if (this.state.category === "Human Organ"){
-            itemOption = this.state.organ.map((organ,index)=>( <option value={organ} key={index}>{organ}</option>))        
+        else if (this.state.category === "protection"){
+            itemOption = this.state.protection.sort((a,b)=>a.localeCompare(b)).map((protection,index)=>( <option value={protection} key={index}>{protection}</option>))        
         }        
-        else if (this.state.category === "Human Blood"){
-            itemOption = this.state.blood.map((blood,index)=>( <option value={blood} key={index}>{blood}</option>))   
+        else if (this.state.category === "human"){
+            itemOption = this.state.human.sort((a,b)=>a.localeCompare(b)).map((human,index)=>( <option value={human} key={index}>{human}</option>))   
         }
-        else if (this.state.category === "Event"){
-            itemOption = this.state.event.map((event,index)=>( <option value={event} key={index}>{event}</option>))   
+
+		else if (this.state.category === "event"){
+            itemOption = this.state.event.sort((a,b)=>a.localeCompare(b)).map((event,index)=>( <option value={event} key={index}>{event}</option>))   
         }
+
+
 		return (
 			<React.Fragment>
-			<div className="home-wrapper mb-5">		
+			<div className="home-wrapper mb-5 col-sm-12">		
 			<h2><i className="fa fa-edit"></i> Lend A Hand</h2>
 			</div>
 
-			<div className="row">
+		
 			<div className="col col-xl-8 col-lg-8 col-md-12 col-sm-12">
 			
             <form>
@@ -262,12 +284,12 @@ class LendAHand extends Component {
                 <div className="form-group">
 					<label htmlFor="category">Category:</label>
 					<select className="form-control" id="category" title="category" onChange={this.categoryChange}>
-						<option value="Equipment" key="1">Equipment</option>
-						<option value="Medicine" key="2">Medicine</option>
-                        <option value="Staff" key="3">Staff</option>
-                        <option value="Human Organ" key="4">Human Organ</option>
-                        <option value="Human Blood" key="5">Human Blood</option>
-                        <option value="Event" key="6">Event</option>	
+						<option value="basic" key="1">Basic Needs</option>
+						<option value="essential" key="2">Clothes & Essential</option>
+						<option value="health" key="3">Health & Medicine</option>
+						<option value="protection" key="4">Protective Equipment</option>
+                        <option value="human" key="5">Human Resource</option>
+                        <option value="event" key="6">Events & Community Program</option>
 					</select>
 				</div>
 
@@ -313,6 +335,12 @@ class LendAHand extends Component {
 					<small className="form-text text-muted">Image format: jpg, png. Max file size 1mb.</small>
 				</div>
 
+				<div className="form-group">
+					<label htmlFor="address">Location:</label>
+					<textarea className={"form-control " + warning.address} id="address" title="address" rows="1" ref={(input) => this.form.address = input} onChange={this.addressChange} autoComplete="off"></textarea>
+					<small className="form-text text-muted">{this.state.address_length}/50 characters available.</small>
+				</div>
+
                 <div className="form-group">
 					<label htmlFor="remarks">Description/Remarks:</label>
 					<textarea className={"form-control " + warning.description} id="remarks" title="remarks" rows="5" ref={(input) => this.form.description = input} onChange={this.descriptionChange} autoComplete="off"></textarea>
@@ -326,7 +354,7 @@ class LendAHand extends Component {
 						<label className="custom-control-label" htmlFor="Yes">Yes</label>
 					</div>
 					<div className="custom-control custom-radio custom-control-inline">
-						<input type="radio" id="No" name="return" className="custom-control-input" value="false"  title="Will not be returned" onChange={this.handleReturn} autoComplete="off" />
+						<input type="radio" id="No" name="return" className="custom-control-input" value="false"  checked={this.state.return === 'false'} title="Will not be returned" onChange={this.handleReturn} autoComplete="off" />
 						<label className="custom-control-label" htmlFor="No">No</label>
 					</div>
 				</div>
@@ -339,7 +367,7 @@ class LendAHand extends Component {
 				<br />
 				{alert}
 				<br />
-				<button type="submit" className="btn btn-outline-dark" title="Lend A Hand" onClick={this.handleForm} disabled={disabled}>Lend A Hand</button>
+				<button type="submit" className="btn btn-outline-dark" title="Lend A Hand" onClick={this.handleForm}>Lend A Hand</button>
 
 			</form>
 			</div>
@@ -376,7 +404,7 @@ class LendAHand extends Component {
 			<div className="card-footer-form text-muted text-center">
 				<button className="btnAlive" disabled="">Take</button>
 			</div>
-</div>
+
 </div>
 </div>
 </React.Fragment>
