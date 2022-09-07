@@ -15,13 +15,12 @@ import Home from './Tools/Home';
 import AdminPage from './Tools/AdminPage';
 import CreateEvent from './CreateEvent/';
 
-import HospitalProfile from './HospitalProfile/HospitalProfile';
-import MyHospitalProfile from './HospitalProfile/MyHospitalProfile';
-import HospitalList from './HospitalProfile/HospitalList';
+import MemberProfile from './Profile/MemberProfile';
+import MyProfile from './Profile/MyProfile';
+import MemberList from './Profile/MemberList';
 import CallForHelp from './Events/CallForHelp';
 import LendAHand from './Events/LendAHand';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
-import {KadenaRegistration_ABI, KadenaRegistration_Address} from '../config/KadenaRegistration';
 
 import Notify from './Norifications/Notify';
 import NotifyLendAHand from './Norifications/NotifyLendAHand';
@@ -35,15 +34,20 @@ import NotifyApproved from './Norifications/NotifyApproved';
 import PageNeed from './Events/PageNeed';
 import PageGive from './Events/PageGive';
 
+import MyTickets from './Ticket/MyTickets';
+import TicketValidator from './Ticket/TicketValidator';
+
 import NetworkError from './ErrorHandling/NetworkError';
 import ChangeNetwork from './ErrorHandling/ChangeNetwork';
 import HowItWorks from './Tools/HowItWorks';
 import Requirements from './Tools/Requirements';
 import About from './Tools/About';
+import DaoPage from './Dao/DaoPage';
 import LoadingApp from './Loaders/LoadingApp';
 
 let ethereum= window.ethereum;
 let web3=window.web3;
+let chainId = 3
 
 class App extends Component
 {
@@ -88,6 +92,11 @@ class App extends Component
 				sent_tx: sent_tx
 			});
 		}
+
+		/*if(!this.props.drizzleStatus.initialized && chainId !== 4){
+			this.loadBlockchainData()
+			console.log('metamaskdsd')
+		}*/
 	}
 
 
@@ -99,6 +108,33 @@ async loadBlockchainData() {
 	 await ethereum.enable();
 	 web3 = new Web3(ethereum);
 	 this.getAccount()
+
+	chainId = 4; // Rinkeby
+
+if (window.ethereum.networkVersion !== chainId) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: web3.utils.toHex(chainId) }]
+        });
+      } catch (err) {
+          // This error code indicates that the chain has not been added to MetaMask
+        if (err.code === 4902) {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainName: 'Rinkeby Test Network',
+                chainId: web3.utils.toHex(chainId),
+                nativeCurrency: { name: 'RinkebyETH', decimals: 18, symbol: 'ETH' },
+                rpcUrls: ['https://rinkeby.infura.io/v3/']
+              }
+            ]
+          });
+        }
+      }
+    }
+
 	 window.ethereum.on('accountsChanged', function (accounts) {
 		window.location.reload();
 	   })
@@ -113,7 +149,12 @@ async loadBlockchainData() {
 	console.log('Web3 Detected!')
 	 window.web3 = new Web3(web3.currentProvider);
 	 this.getAccount()
+	 
 	 }	
+
+
+
+	 
 
  	else{console.log('No Web3 Detected')
  	window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
@@ -127,11 +168,11 @@ async loadBlockchainData() {
 
 		const accounts = await web3.eth.getAccounts()
 		this.setState({account: accounts[0]});
-		const Kadena  =  new web3.eth.Contract(KadenaRegistration_ABI, KadenaRegistration_Address);
+		const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
 		this.setState({Kadena:Kadena});
 		setInterval(async()=>{
-			const get_account = await Kadena.methods.getHospitalStatus(this.state.account).call();
-		this.setState({accountDetails:get_account},()=>console.log(this.state.accountDetails))	
+			const get_account = await Kadena.methods.getMemberStatus(this.state.account).call();
+		this.setState({accountDetails:get_account},()=>console.log())	
 		},2000)
 
 		const blockNumber = await web3.eth.getBlockNumber();
@@ -228,12 +269,15 @@ async loadBlockchainData() {
 	}
 
 	render() {
+		
 
 		let body;
 		let connecting = false;
 
 		if (!this.props.drizzleStatus.initialized) {
 			console.log(this.props.drizzleStatus.initialized)
+			console.log(this.props.web3.networkId)
+
 			body =
 				<div>
 					<Switch>
@@ -243,6 +287,8 @@ async loadBlockchainData() {
 				</div>
 			;
 			connecting = true;
+
+		  console.log('com',connecting)
 		} else if (this.props.web3.status === 'failed') {
 
 			body =
@@ -259,18 +305,22 @@ async loadBlockchainData() {
 				(process.env.NODE_ENV === 'production' && this.props.web3.networkId !== 4)
 				)
 			{
-			  console.log("web3",process.env.NODE_ENV)
+
 			  
+
 			  body = 
 			  		<div>
-			  		<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} />} />
+			  		<Route exact path="/" render={props => <LendAHand  {...props} account ={this.state.account}/>} />
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} /> }  />
 					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account}/>}  />
 					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} />}/>
 					<Route path="/give/:page/:id"  render={props => <PageGive {...props}/>}/>
-					<Route path="/myhospital/" render={props => <MyHospitalProfile {...props} account={this.state.account}/>}/>
-					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
-					<Route path="/hospital-list"  render={props => <HospitalList {...props}/>}/>
+					<Route path="/myprofile/" render={props => <MyProfile {...props} account={this.state.account}/>}/>
+					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
+					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
+					<Route path="/member/:page/:id"  render={props => <MemberProfile {...props}/>}/>
+					<Route path="/member-list"  render={props => <MemberList {...props}/>}/>
+					<Route path="/dao"  render={props => <DaoPage {...props} account={this.state.account}/>}/>
 					<Route path="/register" render={props=><CreateEvent  {...props}
 					account ={this.state.account}/>}/>
 					<Route path="/requirements" component={Requirements} />
@@ -282,16 +332,20 @@ async loadBlockchainData() {
 				}
 		
 		else {
+		
 			body =
 				<div>
-					<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account}/>} />
+					<Route exact path="/" render={props => <LendAHand  {...props} account ={this.state.account}/>} />
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} />}  />
 					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} />}  />
 					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} />}/>
 					<Route path="/give/:page/:id"  render={props => <PageGive {...props}/>}/>
-					<Route path="/myhospital"  render={props => <MyHospitalProfile {...props} account={this.state.account}/>}/>
-					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
-					<Route path="/hospital-list"  render={props => <HospitalList {...props}/>}/>
+					<Route path="/myprofile"  render={props => <MyProfile {...props} account={this.state.account}/>}/>
+					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
+					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
+					<Route path="/member/:page/:id"  render={props => <MemberProfile {...props}/>}/>
+					<Route path="/member-list"  render={props => <MemberList {...props}/>}/>
+					<Route path="/dao"  render={props => <DaoPage {...props} account={this.state.account}/>}/>
 					<Route path="/register" render={props=><CreateEvent  {...props}
 					account ={this.state.account}/>}/>
 					<Route path="/requirements" component={Requirements} />
@@ -314,9 +368,10 @@ async loadBlockchainData() {
 
 						<div className="branding" style ={{textAlign:"center"}}>
 						<div className="brand-wrapper">
-						<h1>KaDenA</h1>
+						<div className = 'shelter-roof-app'/>
+						<h5 className="shelter-logo-app">SHelteR</h5>
+
 						
-						<p>Hospital Alliance</p>
 						</div>
 						</div>
 						<div className="container-fluid">
@@ -345,6 +400,7 @@ const mapStateToProps = state => {
 		transactions: state.transactions
     };
 };
+
 
 const AppContainer = drizzleConnect(App, mapStateToProps);
 export default AppContainer;

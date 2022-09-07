@@ -5,9 +5,12 @@ import App from './components/App';
 import Web3 from "web3";
 
 import Kadena from './config/Kadena.json';
-import KadenaRegistration from './config/KadenaRegistration.json';
-import KadenaNeed from './config/KadenaNeed.json';
-import KadenaGive from './config/KadenaGive.json';
+import {
+	Connect,
+	useApps,
+	useOrganization,
+	usePermissions,
+  } from '@aragon/connect-react';
 
 
 const options = {
@@ -17,19 +20,27 @@ const options = {
 	},
 	events: {
 	},
-	contracts: [Kadena,KadenaRegistration,KadenaNeed,KadenaGive],
+	contracts: [Kadena],
 	
 	polls:{
 		blocks:2500
 	},
 	
 };
+
+const aragon ={
+	options:{
+		network:4
+	},
+}
 //debugger;
 //const rootElement = document.getElementById("root")
 //ReactDOM.render(<App/>,rootElement);
 ReactDOM.render(
-    <DrizzleProvider options={options}>
+    <DrizzleProvider options={options} >
+		<Connect location="blankdao.aragonid.eth" connector="thegraph">
 		<App />
+		</Connect>
 	</DrizzleProvider>,
     document.getElementById("root")
 );
