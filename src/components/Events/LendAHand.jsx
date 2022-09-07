@@ -37,7 +37,7 @@ class LendAHand extends Component
       };
 
 	    this.contracts = context.drizzle.contracts;
-        this.Count = this.contracts['Kadena'].methods.getAssistCount.cacheCall();
+        this.Count = this.contracts['Shelter'].methods.getAssistCount.cacheCall();
 
 
       
@@ -152,7 +152,7 @@ class LendAHand extends Component
     filteredEvents = filteredEvents.filter((events)=>{
       if(this.state.search === 'title'){
     return events.returnValues.title.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
-    else if(this.state.search === 'hospital'){
+    else if(this.state.search === 'name'){
       return events.returnValues.hospital.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
       else if(this.state.search === 'item'){
         return events.returnValues.item.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
@@ -196,15 +196,20 @@ class LendAHand extends Component
     
     let body = '';
     let header = "Active Assistance";
+    let activeButton = true;
+    let pastButton = false;
+
     let loader = <HydroLoader/>
 
 
-    if (typeof this.props.contracts['Kadena'].getAssistCount[this.Count] !== 'undefined' && this.state.active_length !== 'undefined') {
+    if (typeof this.props.contracts['Shelter'].getAssistCount[this.Count] !== 'undefined' && this.state.active_length !== 'undefined') {
       
       let count = this.state.needHelpActive.length
 
       if(!this.state.isActive){
-        header = "Concluded Assistance"
+        header = "Concluded Assistance";
+        activeButton = false;
+        pastButton = true;
       }
      
 			 if (overall === 0 ) {
@@ -216,8 +221,9 @@ class LendAHand extends Component
 				let currentPage = Number(this.props.match.params.page);
 				if (isNaN(currentPage) || currentPage < 1) currentPage = 1;
 
-				let end = currentPage * this.perPage;
+				let end = currentPage  * this.perPage;
 				let start = end - this.perPage;
+
 				if (end > count) end = count;
 				let pages = Math.ceil(count / this.perPage);
 
@@ -277,12 +283,14 @@ class LendAHand extends Component
 				}
 
         body =<div >
-          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Help</button>
-              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Help</button>
+          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)} disabled={activeButton}>Active Help</button>
+              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)} disabled={pastButton}>Past Help</button>
 						<div className="row user-list mt-4">
               
 							{this.state.loadingchain? loader:events_list}
 						</div>
+            {events_list.length === 0 && !this.state.loadingchain && <p className="text-center not-found"><span role="img" aria-label="thinking">🤔</span>&nbsp;No events found. <Link to={'/register'}>Try creating one.</Link></p>}
+
 						{pagination}
 					</div>
 
@@ -306,7 +314,7 @@ class LendAHand extends Component
             
         <select className="input-group-text search-icon" id="inputGroup-sizing-lg" onChange={this.searchChange}>
         <option className="blue"value="title" key="1">Title</option>
-        <option className="blue"value="hospital" key="2">Hospital</option>
+        <option className="blue"value="name" key="2">Name</option>
         <option className="blue"value="item" key="3">Item</option>
         </select>
 
@@ -319,14 +327,13 @@ class LendAHand extends Component
 
         <div className="row row_mobile">
          <h2 className="col-lg-10 col-md-9 col-sm-8"><i className="fa fa-calendar-alt"></i> {header}</h2>
-         
          <button className="btn sort_button col-lg-2 col-md-3 col-sm-3" value={this.state.value} onClick={this.toggleSortDate.bind(this)}>{this.state.isOldestFirst ?'Sort: Oldest':'Sort: Newest'}</button>
         </div>
+
         <div className="row row_mobile">
         <span className="col-lg-10 col-md-9 col-sm-8"></span>
         {this.state.needHelpActive.length !== this.state.active_length && this.state.needHelpActive.length !== 0 && <h5 className="result col-lg-2 col-md-3 col-sm-3">Results: {this.state.needHelpActive.length}</h5>}
-        <div >
-        </div>
+       
         </div>
         <hr/>
          {body}
@@ -334,7 +341,7 @@ class LendAHand extends Component
 
       <div className="topics-wrapper">
            
-          <br/>
+          <hr/>
           <p style ={{textAlign:"center"}}><i class="fas fa-info-circle"></i> Data & information displayed in this site are mock data. It does not represent or in any way connected to real entity or organization. </p>
 
 

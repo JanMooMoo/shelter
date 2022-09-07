@@ -19,8 +19,8 @@ class Event extends Component {
 
         super(props);
 		this.contracts = context.drizzle.contracts;
-		this.event = this.contracts['Kadena'].methods.callForHelpDetails.cacheCall(this.props.id);
-		this.hospital = this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(this.props.owner);
+		this.event = this.contracts['Shelter'].methods.callForHelpDetails.cacheCall(this.props.id);
+		this.member = this.contracts['Shelter'].methods.getMemberStatus.cacheCall(this.props.owner);
 
 		this.account = this.props.accounts[0];
 		this.state = {
@@ -29,7 +29,7 @@ class Event extends Component {
 			description: null,
 			image: null,
 			ipfs_problem: false,
-			locations:null,
+			location:null,
 			
 			commits:0,
 			blocks:'',
@@ -72,9 +72,10 @@ class Event extends Component {
 
 	updateIPFS = () => {
 
-		if (this._isMounted && this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined') {
+		if (this._isMounted && this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Shelter'].callForHelpDetails[this.event] !== 'undefined') {
 			this.setState({
-				loading: true
+				loading: true,
+				location:'Searching For Location...'
 			}, () => {
 				 ipfs.get(this.props.ipfs).then((file) => {
 					let data = JSON.parse(file[0].content.toString());
@@ -84,7 +85,7 @@ class Event extends Component {
 							loaded: true,
 							description: data.remarks,
 							image: data.image,
-							locations:data.location
+							location:data.location
 						});
 					}
 				}).catch(() => {
@@ -114,7 +115,7 @@ class Event extends Component {
 		let description = <Loading />;
 		if (this.state.ipfs_problem) description = <p className="text-center mb-0 event-description"><span role="img" aria-label="monkey">🙊</span>We can not load description</p>;
 		if (this.state.description !== null) {
-			let text = this.state.description.length > 30 ? this.state.description.slice(0, 65) + '...' : this.state.description;
+			let text = this.state.description.length > 42 ? this.state.description.slice(0, 41) + '...' : this.state.description;
 			description = <strong>{text}</strong>;
 			
 		}
@@ -127,15 +128,15 @@ class Event extends Component {
 		
 		let body = <div className="card"><div className="card-body"><Loading /></div></div>;
 
-		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].callForHelpDetails[this.event].value) {
+		if (typeof this.props.contracts['Shelter'].callForHelpDetails[this.event] !== 'undefined' && this.props.contracts['Shelter'].callForHelpDetails[this.event].value) {
 			
 			let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
 			
-			let hospital = '';
-			if(typeof this.props.contracts['Kadena'].getHospitalStatus[this.hospital] !== 'undefined'){
-				hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
+			let member = '';
+			if(typeof this.props.contracts['Shelter'].getMemberStatus[this.member] !== 'undefined'){
+				member = this.props.contracts['Shelter'].getMemberStatus[this.member].value;
 			}
-			event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
+			event_data = this.props.contracts['Shelter'].callForHelpDetails[this.event].value;
 			let image = this.getImage();
 			let description = this.getDescription();
 
@@ -177,7 +178,7 @@ class Event extends Component {
 		  </div></Link>
 				<Link to={titleURL} className="linkDisplay">
 					<div className="card-header text-muted event-header ">
-					<p className="small mb-0 text-center"><strong>Hospital: {hospital._hospitalName}</strong></p>
+					<p className="small mb-0 text-center"><strong>Organizer: {member._name}</strong></p>
 						
 					</div>
 
@@ -193,6 +194,7 @@ class Event extends Component {
 					<div className="card-list">
 					<Link to={titleURL} className="linkDisplay">
 					<ul className="list-group list-group-flush">
+						<li className="list-group-item small"><strong>Location: {this.state.location} </strong></li>
 						<li className="list-group-item small"><strong>Item: {event_data.item}</strong></li>
 						<li className="list-group-item small"><strong>Minimum Pledge: {event_data[6]} Items</strong></li>
 						{event_data.borrow && <li className="list-group-item small"><strong>Will Return In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
@@ -200,7 +202,6 @@ class Event extends Component {
 						<li className="list-group-item small"><strong>Committed: {this.state.commits}/{event_data.amount}</strong></li>
 						<li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 					</ul>
-					
 					</Link>
 					</div>
 					<div className="card-footer text-muted text-center">
@@ -210,7 +211,7 @@ class Event extends Component {
       				show={this.state.pledgeModalShow}
 					onHide={pledgeModalClose}
 					id = {this.props.id}
-					hospital = {hospital._hospitalName}
+					member = {member._name}
 					item = {event_data.item}
 					committed = {this.state.commits}
 					amount = {event_data.amount}

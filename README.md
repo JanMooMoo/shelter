@@ -7,6 +7,9 @@
 * [or IPFS Website](https://shelter.on.fleek.co) <br />
 
 
+* [Watch the presentation](https://youtu.be/4S_hRp-6A5k)
+<br />
+
 ## About Shelter
 Shelter is a secure, immutable & decentralized donation platform that aims to maximize the reach & further improve the impact of our humanitarian relief effort. It uses a BLOCKCHAIN-BASED TICKETING SYSTEM that lets refugees & people affected by the war in Ukraine connect,exchange & get donations directly from people that wants to help.
 <br />
@@ -17,21 +20,6 @@ One of the distrupting features of Shelter is the unique use of tickets. In Shel
 
 ![ReadPhoto](readphoto.png)
 <br />
-
-## Local
-Try it on your Local.
-Clone or Download https://github.com/JanMooMoo/shelter.git
-In the project directory, you can run:
-
-### `npm install`
-Install dependencies of the application.
-
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
 
 ## Tools & Technology used
 * Ethereum - Blockchain Platform          <br/>
@@ -51,4 +39,19 @@ This is to ensure that the data uploaded by the users of shelter are available a
 <br />
 ![ReadPhoto](readphoto2.png)
 <br />
+
+## Local
+Try it on your Local.
+Clone or Download https://github.com/JanMooMoo/shelter.git
+In the project directory, you can run:
+
+### `npm install`
+Install dependencies of the application.
+
+### `npm start`
+
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.<br />
 

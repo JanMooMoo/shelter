@@ -13,7 +13,7 @@ import Clock from '../Clock';
 import JwPagination from 'jw-react-pagination';
 import {Kadena_ABI, Kadena_Address} from '../../config/Kadena';
 import {ModalTake} from '../Modals/ModalTake'
-import HospitalCard from '../HospitalCard';
+import MemberCard from '../MemberCard';
 
 
 let numeral = require('numeral');
@@ -39,13 +39,14 @@ class PageGive extends Component {
     constructor(props, context) {
       super(props);
 		  this.contracts = context.drizzle.contracts;
-          this.event = this.contracts['Kadena'].methods.provideAssistanceDetails.cacheCall(this.props.match.params.id);
+          this.event = this.contracts['Shelter'].methods.provideAssistanceDetails.cacheCall(this.props.match.params.id);
 		  this.state = {
 			  load:true,
 			  loading: false,
 			  loaded: false,
 			  description: null,
 			  image: null,
+			  location:null,
 			  ipfs_problem: false,
 			  organizer:null,
 
@@ -53,6 +54,8 @@ class PageGive extends Component {
 			  latestblocks:5000000,
 
 			  pledgeModalShow:false,
+			  commentView:false,
+
               pageTransactions:[],
               commits:0
 
@@ -119,21 +122,28 @@ class PageGive extends Component {
 		if (
 			this.state.loaded === false &&
 			this.state.loading === false &&
-			typeof this.props.contracts['Kadena'].provideAssistanceDetails[this.event] !== 'undefined' &&
-			!this.props.contracts['Kadena'].provideAssistanceDetails[this.event].error
+			typeof this.props.contracts['Shelter'].provideAssistanceDetails[this.event] !== 'undefined' &&
+			!this.props.contracts['Shelter'].provideAssistanceDetails[this.event].error
 		) {
 			this.setState({
-				loading: true
+				loading: true,
+				location: <span><span role="img" aria-label="dino">🚑</span>We are loading data...</span>
 			}, () => {
-				ipfs.get(this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value[8]).then((file) => {
+				console.log(this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value[8])
+				ipfs.get(this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value[8]).then((file) => {
+				//	console.log(JSON.parse('fQmXsbQ2FKy37qiDiMYmcqHTbZ6qi2XDLNfUmjo42o11nPT'.content.toString())
+
+					//console.log(file)
+
 					let data = JSON.parse(file[0].content.toString());
+					//console.log(data)
 					if (!this.isCancelled) {
 						this.setState({
 							loading: false,
 							loaded: true,
 							description: data.remarks,
 							image: data.image,
-							locations: data.location,
+							location: data.location,
 							organizer: data.organizer
 							  
 						});
@@ -165,9 +175,9 @@ class PageGive extends Component {
 		return description;
     }
     
-    friendlyUrl = (hospitalName,EthAddress) =>{
+    friendlyUrl = (name,EthAddress) =>{
 
-        let rawTitle = hospitalName;
+        let rawTitle = name;
       	var titleRemovedSpaces = rawTitle;
 	  	titleRemovedSpaces = titleRemovedSpaces.replace(/ /g, '-');
 
@@ -176,7 +186,7 @@ class PageGive extends Component {
       	.map((s) => s.charAt(0).toUpperCase() + s.substring(1))
           .join(' ');
             
-          this.props.history.push("/hospital/"+pagetitle+"/"+EthAddress);
+          this.props.history.push("/member/"+pagetitle+"/"+EthAddress);
     }
 
 
@@ -195,9 +205,9 @@ class PageGive extends Component {
 		let body = <Loading />;
 
 
-		if (typeof this.props.contracts['Kadena'].provideAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value) {
+		if (typeof this.props.contracts['Shelter'].provideAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value) {
           
-                let event_data = this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value;
+                let event_data = this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value;
                 let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
                
 				let image = this.getImage();
@@ -216,6 +226,19 @@ class PageGive extends Component {
                 let end_date = months[enddate.getMonth()]+ ". " + enddate.getDate() + ", " + enddate.getFullYear()
                 let disabled = false;
 
+
+				let commentText = "Take";
+				let commentsView = false;
+				let takeView= true;
+
+
+
+				if(this.state.commentView){
+					commentText = "Comments";
+					commentsView = true;
+				 	takeView= false;
+
+				}
 
                 if (enddate.getTime() < new Date().getTime()) {
 					disabled = true;
@@ -270,13 +293,14 @@ class PageGive extends Component {
 					minimum = {event_data[6]}
       				/>}
             	<br />
-                    <HospitalCard organizer = {organizer} history={this.props.history}/>
+                    <MemberCard organizer = {organizer} history={this.props.history}/>
 				   
 
            		<br />
 				</div>
 
 				    <ul className="list-group list-group-flush">
+					<li className="list-group-item-page small">Location: {this.state.location} </li>
 					<li className="list-group-item-page small">Minimum Take: {event_data[6]} Items</li>
 					<li className="list-group-item-page small">{symbol} {end_date} at {enddate.toLocaleTimeString()}</li>
 					<li className="list-group-item-page small">Item Pool: {event_data.item}</li>
@@ -285,15 +309,27 @@ class PageGive extends Component {
 				</div>
 						
                 {this._isMounted && <Clock deadline = {enddate} event_unix = {event_data.endDate}/>}
-              	<div className="new-transaction-wrapper"><h4 className="transactions"><i class="fas fa-hand-holding-medical"></i> Take</h4> 
-  					{this.state.load &&<Loading/>}
-                    {this.state.pageTransactions.map((pledged,index)=>(<p className="sold_text col-md-12 small" key={index}><img className="float-left blockie" src={makeBlockie(pledged.returnValues.takenBy)} title={pledged.returnValues.takenBy} alt="blockie"/><strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.takenBy)}>{pledged.returnValues.receiver}</strong> has taken <strong ><a href={"https://rinkeby.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.received} {pledged.returnValues.item}</a></strong> from <strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.sender,pledged.returnValues.tookFrom)}>{pledged.returnValues.sender}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></p>
+              	<div className="new-transaction-wrapper">
+  				
+					<h4 className="transactions"><i class="fas fa-hand-holding-medical"></i> {commentText}  <div className="commentButton">	
+				
+					<button className="btn btn-outline-dark mt-2 mr-3" onClick={() => this.setState({commentView:false})} disabled={takeView}>Take History</button>
+					<button className="btn btn-outline-dark mt-2" onClick={() => this.setState({commentView:true})} disabled={commentsView}>Comment Section</button></div>
+				
+					</h4> 
+				
+				
+					{this.state.load &&<Loading/>}
+                    {!this.state.commentView && this.state.pageTransactions.map((pledged,index)=>(<p className="sold_text col-md-12 small" key={index}><img className="float-left blockie" src={makeBlockie(pledged.returnValues.takenBy)} title={pledged.returnValues.takenBy} alt="blockie"/><strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.takenBy)}>{pledged.returnValues.receiver}</strong> has taken <strong ><a href={"https://rinkeby.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.received} {pledged.returnValues.item}</a> Tickets</strong> from <strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.sender,pledged.returnValues.tookFrom)}>{pledged.returnValues.sender}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></p>
                     ))}
-  					{!commits &&  <p className="sold_text col-md-12 no-tickets">No hospital has taken a single item.</p>}
-  					</div>
+
+
+  					{!commits && !this.state.commentView && <p className="sold_text col-md-12 no-tickets">No one has taken a single item.</p>}
+					{this.state.commentView && <p className="sold_text col-md-12 no-tickets">Under Construction.</p>}
+					</div>
 
 					<div className="pagination">
-					<JwPagination items={this.state.commited} onChangePage={this.onChangePage} maxPages={5} pageSize={5} styles={customStyles} />	
+					{!this.state.commentView &&<JwPagination items={this.state.commited} onChangePage={this.onChangePage} maxPages={5} pageSize={5} styles={customStyles} />	}
 				</div>
                         
 

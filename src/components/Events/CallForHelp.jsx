@@ -36,7 +36,7 @@ class CallForHelp extends Component
       };
 
 	    this.contracts = context.drizzle.contracts;
-        this.Count = this.contracts['Kadena'].methods.getNeededCount.cacheCall();
+        this.Count = this.contracts['Shelter'].methods.getNeededCount.cacheCall();
 
 	    this.perPage = 6;
       this.toggleSortDate = this.toggleSortDate.bind(this);
@@ -142,7 +142,7 @@ class CallForHelp extends Component
     filteredEvents = filteredEvents.filter((events)=>{
       if(this.state.search === 'title'){
         return events.returnValues.title.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
-      else if(this.state.search === 'hospital'){
+      else if(this.state.search === 'name'){
         return events.returnValues.hospital.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
       else if(this.state.search === 'item'){
         return events.returnValues.item.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
@@ -186,16 +186,21 @@ class CallForHelp extends Component
     
     let body = '';
     let header = "Active Needs";
+    let activeButton = true;
+    let pastButton = false;
+
     let loader = <HydroLoader/>
 
     
 
-    if (typeof this.props.contracts['Kadena'].getNeededCount[this.Count] !== 'undefined' && this.state.active_length !== 'undefined') {
+    if (typeof this.props.contracts['Shelter'].getNeededCount[this.Count] !== 'undefined' && this.state.active_length !== 'undefined') {
       
       let count = this.state.needHelpActive.length
 
       if(!this.state.isActive){
         header = "Concluded Needs"
+        activeButton = false;
+        pastButton = true;
       }
      
 			 if (overall === 0 ) {
@@ -271,12 +276,14 @@ class CallForHelp extends Component
 				}
 
         body =<div >
-          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Needs</button>
-              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Needs</button>
+          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)} disabled={activeButton}>Active Needs</button>
+              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)} disabled={pastButton}>Past Needs</button>
 						<div className="row user-list mt-4">
               
 							{this.state.loadingchain? loader:events_list}
 						</div>
+
+            {events_list.length === 0 && !this.state.loadingchain && <p className="text-center not-found"><span role="img" aria-label="thinking">🤔</span>&nbsp;No events found. <Link to={'/register'}>Try creating one.</Link></p>}
 						{pagination}
 					</div>
 
@@ -300,7 +307,7 @@ class CallForHelp extends Component
             
         <select className="input-group-text search-icon" id="inputGroup-sizing-lg" onChange={this.searchChange}>
         <option className="blue"value="title" key="1">Title</option>
-        <option className="blue"value="hospital" key="2">Hospital</option>
+        <option className="blue"value="name" key="2">Name</option>
         <option className="blue"value="item" key="3">Item</option>
         </select>
 

@@ -17,8 +17,8 @@ class EventGive extends Component {
 
         super(props);
 		this.contracts = context.drizzle.contracts;
-		this.event = this.contracts['Kadena'].methods.provideAssistanceDetails.cacheCall(this.props.id);
-		this.hospital = this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(this.props.owner);
+		this.event = this.contracts['Shelter'].methods.provideAssistanceDetails.cacheCall(this.props.id);
+		this.member = this.contracts['Shelter'].methods.getMemberStatus.cacheCall(this.props.owner);
 
 		this.account = this.props.accounts[0];
 		this.state = {
@@ -27,7 +27,7 @@ class EventGive extends Component {
 			description: null,
 			image: null,
 			ipfs_problem: false,
-			locations:null,
+			location:null,
 			
 			pledgeModalShow:false
 		};
@@ -38,19 +38,21 @@ class EventGive extends Component {
 
 	updateIPFS = () => {
 
-		if (this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Kadena'].provideAssistanceDetails[this.event] !== 'undefined') {
+		if (this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Shelter'].provideAssistanceDetails[this.event] !== 'undefined') {
 			this.setState({
-				loading: true
+				loading: true,
+				location:'Searching For Location...'
 			}, () => {
 				 ipfs.get(this.props.ipfs).then((file) => {
 					let data = JSON.parse(file[0].content.toString());
+
 					if (!this.isCancelled) {
 						this.setState({
 							loading: false,
 							loaded: true,
 							description: data.remarks,
 							image: data.image,
-							locations:data.location
+							location:data.location
 						});
 					}
 				}).catch(() => {
@@ -80,7 +82,7 @@ class EventGive extends Component {
 		let description = <Loading />;
 		if (this.state.ipfs_problem) description = <p className="text-center mb-0 event-description"><span role="img" aria-label="monkey">🙊</span>We can not load description</p>;
 		if (this.state.description !== null) {
-			let text = this.state.description.length > 30 ? this.state.description.slice(0, 65) + '...' : this.state.description;
+			let text = this.state.description.length > 41 ? this.state.description.slice(0, 39) + '...' : this.state.description;
 			description = <strong>{text}</strong>;
 			
 		}
@@ -91,15 +93,15 @@ class EventGive extends Component {
 		
 		let body = <div className="card"><div className="card-body"><Loading /></div></div>;
 
-		if (typeof this.props.contracts['Kadena'].provideAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value) {
+		if (typeof this.props.contracts['Shelter'].provideAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value) {
 			
 			let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
 			
-			let hospital = '';
-			if(typeof this.props.contracts['Kadena'].getHospitalStatus[this.hospital] !== 'undefined'){
-				hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
+			let member = '';
+			if(typeof this.props.contracts['Shelter'].getMemberStatus[this.member] !== 'undefined'){
+				member = this.props.contracts['Shelter'].getMemberStatus[this.member].value;
 			}
-			let event_data = this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value;
+			let event_data = this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value;
 
 			let image = this.getImage();
 			let description = this.getDescription();
@@ -143,7 +145,7 @@ class EventGive extends Component {
 		  </div></Link>
 				<Link to={titleURL} className="linkDisplay">
 					<div className="card-header text-muted event-header ">
-					<p className="small mb-0 text-center"><strong>Hospital: {hospital._hospitalName}</strong></p>
+					<p className="small mb-0 text-center"><strong>Organizer: {member._name}</strong></p>
 						
 					</div>
 
@@ -159,6 +161,7 @@ class EventGive extends Component {
 					<div className="card-list">
 					<Link to={titleURL} className="linkDisplay">
 					<ul className="list-group list-group-flush">
+						<li className="list-group-item small"><strong>Location: {this.state.location} </strong></li>
 						<li className="list-group-item small"><strong>Item: {event_data.item} </strong></li>
 						<li className="list-group-item small"><strong>Minimum Take: {event_data[6]} Items</strong></li>
 						{event_data.borrow && <li className="list-group-item small"><strong>Should return on: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
@@ -176,7 +179,7 @@ class EventGive extends Component {
       				show={this.state.pledgeModalShow}
 					onHide={pledgeModalClose}
 					id = {this.props.id}
-					hospital = {hospital._hospitalName}
+					member = {member._name}
 					item = {event_data.item}
 					committed = {event_data.committed}
 					amount = {event_data.amount}
