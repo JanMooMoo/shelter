@@ -266,7 +266,7 @@ class DaoPage extends Component
         </div>
         <hr/>
         <div className="topics-wrapper">
-        <h3 style ={{textAlign:"center"}} className="mt-4 mb-4">Dao Proposals Sample Page.</h3>
+        <h3 style ={{textAlign:"center"}} className="mt-4 mb-4">Dao Proposals Sample Page Only. Go to <a href="https://client.aragon.org/#/shelter/0x1f0d61d22153dd964012206d5536b000b06c1091/" target ="blank">shelter.aragonid.eth</a> for voting</h3>
 
            <br/>
            

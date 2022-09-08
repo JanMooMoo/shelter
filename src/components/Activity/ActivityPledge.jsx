@@ -66,7 +66,7 @@ render(){
       <h5 className="spin mt-5 small"><i className="fas fa-spinner"></i></h5>
     </div>
     }
-    else if(this.state.commited.length === 0 && !this.state.loading && this.state.commentView){
+    else if(this.state.commited.length === 0 && !this.state.loading){
         body = <div style ={{textAlign:"center"}}>
             <h5 className="linkDisplay mt-5 small"><strong>No Activity</strong></h5>
         </div>

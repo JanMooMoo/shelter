@@ -8,8 +8,7 @@ import html2canvas from "html2canvas";
 import Web3 from 'web3';
 import {Kadena_ABI, Kadena_Address} from '../../config/Kadena';
 import { useParams } from "react-router-dom";
-
-
+//import { Web3Storage } from 'web3.storage';
 
 
 
@@ -70,8 +69,6 @@ class TicketValidator extends Component {
        // let hash =  this.props.match.params.hash;
         //let block = this.props.match.params.block;
 
-console.log('sdsd',id,hash,block)
-
         const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
         const Kadena =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
         this.setState({Shelter:Kadena})
@@ -88,29 +85,26 @@ console.log('sdsd',id,hash,block)
         }
       
        let txhash = await web3.eth.getTransaction(this.hash) 
-        console.log(txhash)
 
         this.setState({tickethash:txhash,loading:false},()=>console.log());
 
         Kadena.getPastEvents("Taken",{filter:{takenBy:this.state.tickethash.from},fromBlock: this.block, toBlock:this.block})
         .then(events=>{
-            console.log('events',events[0].transactionHash)
         if(this._isMounted && events[0].transactionHash === this.hash){
-        this.setState({ticket: events[0].returnValues},()=>console.log('ucsds',this.state.ticket))
+        this.setState({ticket: events[0].returnValues},()=>console.log())
        
           }
         }).catch((err)=>console.error(err))
         }
 
 	updateIPFS = () => {
-        console.log(this.state.loaded, this.state.loading,typeof this.props.contracts['Shelter'].provideAssistanceDetails[this.event])
+       // console.log(this.state.loaded, this.state.loading,typeof this.props.contracts['Shelter'].provideAssistanceDetails[this.event])
 		if (this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Shelter'].provideAssistanceDetails[this.event] !== 'undefined') {
 			this.setState({
 				loading: true
 			}, () => {
 				 ipfs.get(this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value[8]).then((file) => {
 					let data = JSON.parse(file[0].content.toString());
-                    console.log(data)
 					if (!this.isCancelled) {
 						this.setState({
 							loading: false,
@@ -158,22 +152,21 @@ console.log('sdsd',id,hash,block)
 		if (this.state.ipfs_problem) location = <p className="text-center mb-0 event-description"><span role="img" aria-label="monkey">🙊</span>We can not load location</p>;
 		if (this.state.location !== null) {
 			let place= this.state.location
-			console.log(location)
 
 			location = {place}
 		}
 		return location;
 	}
 
-	
 
+	
 
 	
 	downloadQR = () => {
 		
 	  };
 	  dload =(id,title)=>{
-		
+	
 setTimeout(()=>this.setState({capture:true},()=>this.capture(id,title)),500)
 		
 
@@ -197,8 +190,6 @@ setTimeout(()=>this.setState({capture:true},()=>this.capture(id,title)),500)
 
 	}
 	render() {
-		//console.log('event ID',this.props.ticket.returnValues.eventId)
-		console.log(this.event)
 
 		let border = 'ticket-validity';
 		let lineCut = 'line-cut';
@@ -224,7 +215,6 @@ setTimeout(()=>this.setState({capture:true},()=>this.capture(id,title)),500)
 		let body = <div></div>;
 
 		if (typeof this.props.contracts['Shelter'].provideAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value ) {
-            console.log(this.state.ticket)
 			let image = this.getImage();
 			let location = this.getLocation();
 
@@ -232,9 +222,6 @@ setTimeout(()=>this.setState({capture:true},()=>this.capture(id,title)),500)
             let ticket_data = this.state.ticket
             
 			let event_data = this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value;
-            console.log('eve',event_data)
-
-			console.log(ticket_data)
 
             let date = new Date(parseInt(event_data.endDate, 10) * 1000);
 

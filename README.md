@@ -3,11 +3,11 @@
 
 1. Website <br />
 * [Try it on traditional website](https://shelter.services) <br />
-  <br />
 * [or IPFS Website](https://shelter.on.fleek.co) <br />
 
-
-* [Watch the presentation](https://youtu.be/4S_hRp-6A5k)
+2. Videos <br />
+* [Watch the presentation](https://youtu.be/4S_hRp-6A5k) <br />
+* [Watch the IPFS Demo](https://youtu.be/o7eD2ZSegaU) <br />
 <br />
 
 ## About Shelter
@@ -34,6 +34,8 @@ One of the distrupting features of Shelter is the unique use of tickets. In Shel
 
 
 ## Usage of Inter-planetary File System (IPFS)
+* [Watch the IPFS Demo](https://youtu.be/o7eD2ZSegaU) <br />
+
 Shelter uses IPFS as its main file storage & rely heavily into it. Some of important details from the Core Functions of Shelter like REGISTRATION, CALL-FOR-HELP, & LEND-A-HAND are pinned & uploaded into the IPFS.
 This is to ensure that the data uploaded by the users of shelter are available anytime & anywhere. this includes all the photos, profile details, event photos & event descriptions.
 <br />

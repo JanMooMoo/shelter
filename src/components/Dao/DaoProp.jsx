@@ -100,7 +100,7 @@ class DaoProp extends Component {
 				<div className="cardVote">
 					
 					<div className="card-header text-muted event-header ">
-					<p className="small mb-0 text-center"><strong>Proposer: shelter.aragonid.eth </strong></p>
+					<p className="small mb-0 text-center" ><strong><a href="https://client.aragon.org/#/shelter/0x1f0d61d22153dd964012206d5536b000b06c1091/" target ="blank">Proposer: shelter.aragonid.eth </a></strong></p>
 			
 				
 					<h4 className="small mt-4 mb-4"><strong>Proposal # {Number(this.props.id) + 1}: {this.props.title} </strong></h4>
