@@ -8,7 +8,6 @@
 2. Videos <br />
 * [Watch the presentation](https://youtu.be/4S_hRp-6A5k) <br />
 * [Watch the IPFS Demo](https://youtu.be/o7eD2ZSegaU) <br />
-<br />
 
 ## About Shelter
 Shelter is a secure, immutable & decentralized donation platform that aims to maximize the reach & further improve the impact of our humanitarian relief effort. It uses a BLOCKCHAIN-BASED TICKETING SYSTEM that lets refugees & people affected by the war in Ukraine connect,exchange & get donations directly from people that wants to help.
