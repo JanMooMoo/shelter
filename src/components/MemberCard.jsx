@@ -97,7 +97,7 @@ class MemberCard extends Component {
     }
 
 	async message(){
-		const fetch = require('node-fetch');
+		/*const fetch = require('node-fetch');
 		const options = {
 			method:'POST',
 			//mode: "no-cors",
@@ -134,7 +134,9 @@ class MemberCard extends Component {
 		console.log(options)
 		fetch('https://api.courier.com/send',options)
 		.then(response => response.json())
-		.then(response => console.log(response))
+		.then(response => console.log(response))*/
+
+
 		/*
       1) Install Courier SDK: npm install @trycourier/courier
       2) Make sure you allow ES module imports: Add "type": "module" to package.json file 
@@ -150,11 +152,11 @@ class MemberCard extends Component {
 
 	ourRequest.send();*/
 
-      /*const courier = CourierClient(
+      const courier = CourierClient(
         { authorizationToken: "pk_prod_VF6RD316WTM752MYV3QVY84EPNHT"});
-		delete courier["axios"].defaults.headers["User-Agent"];
-      ourRequest.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
-         ourRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
+		//delete courier["axios"].defaults.headers["User-Agent"];
+    //  ourRequest.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
+        // ourRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
       const { requestId } = await courier.send({
         message: {
           content: {
@@ -168,7 +170,7 @@ class MemberCard extends Component {
             email: "moonmusic91@gmail.com"
           }
         }
-      });*/
+      });
 	  console.log('sent')
 	}
 
