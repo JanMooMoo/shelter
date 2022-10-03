@@ -34,8 +34,8 @@ html {
 
   margin-top: 13%;
   margin-right: 21%;
-  height:102px;
-  width: 102px;
+  height:306px;
+  width: 306px;
 
   bafckground: linear-gradient(136deg, #1480ec67,#38628b67,#ddec1400,rgba(197, 181, 33, 0),rgba(35, 36, 48, 0),rgba(35, 36, 48, 0),rgba(35, 36, 48, 0)); 
 
@@ -47,6 +47,12 @@ html {
   z-index:1000;
   float: right;
 
+}
+
+.QR_scan{
+  width:60%;
+  margin:0 auto;
+  border:5px solid white;
 }
 
 body {

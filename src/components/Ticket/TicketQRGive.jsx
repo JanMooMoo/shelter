@@ -218,7 +218,6 @@ dload =(id,title)=>{
 										bgColor="black" 
 										fgColor="white" 
 										imageSettings = {{
-										src:'/images/hydro.png',
 										height:20,
 										width:20,
 										x: null,

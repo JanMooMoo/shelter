@@ -36,6 +36,7 @@ import PageGive from './Events/PageGive';
 
 import MyTickets from './Ticket/MyTickets';
 import TicketValidator from './Ticket/TicketValidator';
+import TicketScanner from './Ticket/TicketScanner';
 
 import NetworkError from './ErrorHandling/NetworkError';
 import ChangeNetwork from './ErrorHandling/ChangeNetwork';
@@ -44,6 +45,8 @@ import Requirements from './Tools/Requirements';
 import About from './Tools/About';
 import DaoPage from './Dao/DaoPage';
 import LoadingApp from './Loaders/LoadingApp';
+
+import { CourierClient } from "@trycourier/courier";
 
 let ethereum= window.ethereum;
 let web3=window.web3;
@@ -201,6 +204,8 @@ if (window.ethereum.networkVersion !== chainId) {
 					pauseOnHover: true
 		
 				});
+
+				this.sendMail()
 		
 			}
 			if(log.returnValues.takenBy === this.state.account){
@@ -215,6 +220,7 @@ if (window.ethereum.networkVersion !== chainId) {
 					pauseOnHover: true
 		
 				});
+				this.sendMail()
 		
 			}
 			if(log.returnValues.applicant === this.state.account){
@@ -268,6 +274,9 @@ if (window.ethereum.networkVersion !== chainId) {
 			}
 	}
 
+	sendMail(){
+		
+	}
 	render() {
 		
 
@@ -318,6 +327,7 @@ if (window.ethereum.networkVersion !== chainId) {
 					<Route path="/myprofile/" render={props => <MyProfile {...props} account={this.state.account}/>}/>
 					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
 					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
+					<Route path="/scanner" render={props => <TicketScanner {...props} account={this.state.account}/>}/>
 					<Route path="/member/:page/:id"  render={props => <MemberProfile {...props}/>}/>
 					<Route path="/member-list"  render={props => <MemberList {...props}/>}/>
 					<Route path="/dao"  render={props => <DaoPage {...props} account={this.state.account}/>}/>
@@ -343,6 +353,7 @@ if (window.ethereum.networkVersion !== chainId) {
 					<Route path="/myprofile"  render={props => <MyProfile {...props} account={this.state.account}/>}/>
 					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
 					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
+					<Route path="/scanner" render={props => <TicketScanner {...props} account={this.state.account}/>}/>
 					<Route path="/member/:page/:id"  render={props => <MemberProfile {...props}/>}/>
 					<Route path="/member-list"  render={props => <MemberList {...props}/>}/>
 					<Route path="/dao"  render={props => <DaoPage {...props} account={this.state.account}/>}/>

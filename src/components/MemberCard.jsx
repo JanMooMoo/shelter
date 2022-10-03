@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { drizzleConnect } from "drizzle-react";
 import PropTypes from 'prop-types';
 import ipfs from '../utils/ipfs';
+import { CourierClient } from "@trycourier/courier";
+import { _ } from 'numeral';
+
+
 
 
 class MemberCard extends Component {
@@ -92,6 +96,82 @@ class MemberCard extends Component {
           this.props.history.push("/member/"+pagetitle+"/"+this.props.organizer);
     }
 
+	async message(){
+		const fetch = require('node-fetch');
+		const options = {
+			method:'POST',
+			//mode: "no-cors",
+			headers:{
+				'Accept':'application/json',
+				'Content-Type': 'application/json',
+				"Access-Control-Expose-Headers": "Content-Length, X-JSON",
+				'Origin':'*',
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+				'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+				'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
+				'Access-control-allow-credentials':'true',
+				
+				
+				
+
+
+				
+			},
+			
+			body:JSON.stringify({
+				'message':{
+					'to':{
+						'email':'moonmusic91@gmail.com'
+					},
+					'content':{
+						'title':'hello',
+						'body':'dasdasdsad'
+					}
+				}
+			})
+		}
+		console.log(options)
+		fetch('http://api.courier.com/send',options)
+		.then(response => response.json())
+		.then(response => console.log(response))
+		/*
+      1) Install Courier SDK: npm install @trycourier/courier
+      2) Make sure you allow ES module imports: Add "type": "module" to package.json file 
+      */
+
+	
+    /*var ourRequest = new XMLHttpRequest();
+	//  var url = bURL + endpoint + '?' + dataQueryString + '&signature=' + signature;
+	var url = 'https://api.courier.com/send/pk_prod_VF6RD316WTM752MYV3QVY84EPNHT';
+
+	ourRequest.open('POST',url,true);
+	    ourRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
+
+	ourRequest.send();*/
+
+      /*const courier = CourierClient(
+        { authorizationToken: "pk_prod_VF6RD316WTM752MYV3QVY84EPNHT"});
+		delete courier["axios"].defaults.headers["User-Agent"];
+      ourRequest.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
+         ourRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
+      const { requestId } = await courier.send({
+        message: {
+          content: {
+            title: "Welcome to Courier!",
+            body: "Want to hear a joke? {{joke}}"
+          },
+          data: {
+            joke: "Why was the JavaScript developer sad? Because they didn't Node how to Express themselves"
+          },
+          to: {
+            email: "moonmusic91@gmail.com"
+          }
+        }
+      });*/
+	  console.log('sent')
+	}
+
 	
 		render() {
 		let body = '';
@@ -148,6 +228,8 @@ class MemberCard extends Component {
 			<div className="mt-2">
 				<h3><i class="fas fa-hospital-user ml-4"/> Oganizer Profile</h3>
                 <p className="small text-truncate ml-1" ><strong>Shelter Member Since: {memberSince}</strong></p>
+				<button className="small text-truncate ml-1" onClick={()=>this.message()}>Send</button>
+
 				<hr />
 				{body}
 			</div>
