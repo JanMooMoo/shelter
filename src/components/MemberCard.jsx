@@ -105,8 +105,8 @@ class MemberCard extends Component {
 				'Accept':'application/json',
 				'Content-Type': 'application/json',
 				"Access-Control-Expose-Headers": "Content-Length, X-JSON",
-				'Origin':'*',
-				'Access-Control-Allow-Origin': '*',
+				'Origin':'https://www.shelter.services',
+				'Access-Control-Allow-Origin': 'https://www.shelter.services',
 				'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
 				'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
 				'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
@@ -132,7 +132,7 @@ class MemberCard extends Component {
 			})
 		}
 		console.log(options)
-		fetch('http://api.courier.com/send',options)
+		fetch('https://api.courier.com/send',options)
 		.then(response => response.json())
 		.then(response => console.log(response))
 		/*
