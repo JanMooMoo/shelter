@@ -235,7 +235,9 @@ class LendAHand extends Component
             id={this.state.needHelpActive[i].returnValues.eventId}
             ipfs={this.state.needHelpActive[i].returnValues.ipfs}
             owner={this.state.needHelpActive[i].returnValues.ownerGive} 
-            account = {this.props.account}/>);
+            account = {this.props.account}
+            setMail={this.props.setMail}
+            accountDetails = {this.props.accountDetails}/>);
         }
         
 				let pagination = '';
@@ -356,6 +358,7 @@ class LendAHand extends Component
   componentDidMount() {
     this._isMounted = true;
     this.loadBlockchain();
+  
   
   }
 

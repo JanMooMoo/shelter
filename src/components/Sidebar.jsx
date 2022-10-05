@@ -15,8 +15,10 @@ class Sidebar extends Component
 	
 
 	sidebarClick()
+	
 	{
 		this.props.refresh()
+	
 		var isActive = this.context.router.route.location.pathname;
 		var activeClassName = "";
 		var linkLocation = this.props.to;

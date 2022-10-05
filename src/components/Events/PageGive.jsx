@@ -133,10 +133,8 @@ class PageGive extends Component {
 				ipfs.get(this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value[8]).then((file) => {
 				//	console.log(JSON.parse('fQmXsbQ2FKy37qiDiMYmcqHTbZ6qi2XDLNfUmjo42o11nPT'.content.toString())
 
-					//console.log(file)
 
 					let data = JSON.parse(file[0].content.toString());
-					//console.log(data)
 					if (!this.isCancelled) {
 						this.setState({
 							loading: false,
@@ -268,7 +266,7 @@ class PageGive extends Component {
       	.join(' ');
 
 		if(this.props.match.params.page === pagetitle){
-		 
+
 				body =
 				<div className="row">
 				<div className="col-12">
@@ -291,6 +289,13 @@ class PageGive extends Component {
 					committed = {this.state.commits}
 					amount = {event_data.amount}
 					minimum = {event_data[6]}
+
+					setMail = {this.props.setMail}
+					title = {event_data.title}
+					url={'/give/'+this.props.match.params.page +'/'+this.props.match.params.id}
+					organizer={organizer}
+					contracts = {this.props.contracts}
+					accountDetails = {this.props.accountDetails}
       				/>}
             	<br />
                     <MemberCard organizer = {organizer} history={this.props.history}/>

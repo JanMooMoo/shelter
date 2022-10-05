@@ -67,6 +67,7 @@ class Event extends Component {
     this.setState({commits:committed.committed})
 	},10000)}
     })
+	
 	}
 
 
@@ -217,6 +218,7 @@ class Event extends Component {
 					amount = {event_data.amount}
 					minimum = {event_data[6]}
 					account = {this.props.account}
+					setMail = {this.props.setMail}
       				/>}
 					</div>
 					
@@ -235,6 +237,7 @@ class Event extends Component {
 		this._isMounted = true;
 		this.updateIPFS();
 		this.loadBlockchain();
+		
 
 	}
 

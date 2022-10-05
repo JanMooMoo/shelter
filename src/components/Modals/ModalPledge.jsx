@@ -8,6 +8,7 @@ export class ModalPledge extends Component{
 
     componentDidMount(){
         this._isMounted = true;
+        this.setMail();
        
        }
        
@@ -36,6 +37,10 @@ constructor(props,context){
         amount: amount
     },()=>console.log());
     
+}
+
+setMail = ()=>{
+  this.props.setMail()
 }
 
 pledge = ()=>{

@@ -3,7 +3,7 @@ import { drizzleConnect } from "drizzle-react";
 import PropTypes from 'prop-types';
 import ipfs from '../utils/ipfs';
 import { CourierClient } from "@trycourier/courier";
-import { _ } from 'numeral';
+
 
 
 
@@ -97,7 +97,12 @@ class MemberCard extends Component {
     }
 
 	async message(){
-		/*const fetch = require('node-fetch');
+		const fetch = require('node-fetch');
+
+		let body = 'Vlad Churov has taken 3 Shelter Tickets from Free Apartment Accommodation';
+		let subject = 'Someone has taken Tickets';
+		let recepient = 'moonmusic91@gmail.com'
+
 		const options = {
 			method:'POST',
 			//mode: "no-cors",
@@ -120,21 +125,26 @@ class MemberCard extends Component {
 			},
 			
 			body:JSON.stringify({
-				'message':{
-					'to':{
-						'email':'moonmusic91@gmail.com'
+				message: {
+					to: {
+					  email: "moonmusic91@gmail.com",
 					},
-					'content':{
-						'title':'hello',
-						'body':'dasdasdsad'
-					}
-				}
+					template: "8N689A8MG54A06JCZAD48WFA1W1Y",
+					data: {
+					  taker_name: "Vlad Churov",
+					  event_creator: "John",
+					  event_title: "Free-apartment-accommodation",
+					  action_performed: "took",
+					  ticket_quantity: "3",
+					  event_link: "https://shelter.services/give/Free-apartment-accommodation/5",
+					},
+				  },
 			})
 		}
 		console.log(options)
-		fetch('https://api.courier.com/send',options)
+		fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
 		.then(response => response.json())
-		.then(response => console.log(response))*/
+		.then(response => console.log(response))
 
 
 		/*
@@ -151,26 +161,32 @@ class MemberCard extends Component {
 	    ourRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
 
 	ourRequest.send();*/
-
-      const courier = CourierClient(
-        { authorizationToken: "pk_prod_VF6RD316WTM752MYV3QVY84EPNHT"});
-		//delete courier["axios"].defaults.headers["User-Agent"];
-    //  ourRequest.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
-        // ourRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
+	
+     /* const courier = CourierClient(
+        { authorizationToken: "PK_PROD_VF6RD316WTM752MYV3QVY84EPNHT"});
+		xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
       const { requestId } = await courier.send({
+		
         message: {
           content: {
             title: "Welcome to Courier!",
-            body: "Want to hear a joke? {{joke}}"
+            body: "Want to hear a joke?"
           },
           data: {
-            joke: "Why was the JavaScript developer sad? Because they didn't Node how to Express themselves"
+            recipientName: "Why was the JavaScript developer sad? Because they didn't Node how to Express themselves"
           },
           to: {
             email: "moonmusic91@gmail.com"
-          }
-        }
-      });
+          },
+		  template: "8N689A8MG54A06JCZAD48WFA1W1Y",
+        },
+		routing: {
+			method: "single",
+			channels: ["email"],
+		  },
+      });*/
+
+
 	  console.log('sent')
 	}
 

@@ -32,6 +32,7 @@ class EventGive extends Component {
 			pledgeModalShow:false
 		};
 		this.isCancelled = false;
+		
 	}
 
 
@@ -67,7 +68,7 @@ class EventGive extends Component {
 			});
 
 		}
-
+		
 	}
 
 
@@ -102,6 +103,7 @@ class EventGive extends Component {
 				member = this.props.contracts['Shelter'].getMemberStatus[this.member].value;
 			}
 			let event_data = this.props.contracts['Shelter'].provideAssistanceDetails[this.event].value;
+			let organizer = event_data.owner;
 
 			let image = this.getImage();
 			let description = this.getDescription();
@@ -185,6 +187,12 @@ class EventGive extends Component {
 					amount = {event_data.amount}
 					account = {this.props.account}
 					minimum = {event_data[6]}
+					setMail = {this.props.setMail}
+					title = {event_data.title}
+					url={titleURL}
+					organizer={organizer}
+					contracts = {this.props.contracts}
+					accountDetails = {this.props.accountDetails}
       				/>}
 					</div>
 					
@@ -202,7 +210,7 @@ class EventGive extends Component {
 	componentDidMount() {
 		this._isMounted = true;
 		this.updateIPFS();
-
+		
 	}
 
 	componentDidUpdate() {

@@ -65,9 +65,21 @@ class App extends Component
 			refresh:false,
 			accountDetails:[],
 			block:500000,
+			//mail
+			creator:'',
+			creator_mail:'',
+			taker:'',
+			quantity:0,
+			event_title:'',
+			event_link:'',
+			event_ticket:'',
+			action:'',
+			user_contact:'',
 
 		};
 		this.loadBlockchainData = this.loadBlockchainData.bind(this);
+		this.setMail= this.setMail.bind(this);
+
 	}
 
 	componentDidMount(){
@@ -210,7 +222,7 @@ if (window.ethereum.networkVersion !== chainId) {
 			}
 			if(log.returnValues.takenBy === this.state.account){
 
-				toast(<NotifyTake hash={log.blockHash} 
+				toast(<NotifyTake hash={log.transactionHash} 
 					sender={log.returnValues.sender} 
 					item = {log.returnValues.item}
 					received = {log.returnValues.received}/>, 
@@ -220,7 +232,7 @@ if (window.ethereum.networkVersion !== chainId) {
 					pauseOnHover: true
 		
 				});
-				this.sendMail()
+				this.sendMail(log,log.returnValues.eventId)
 		
 			}
 			if(log.returnValues.applicant === this.state.account){
@@ -274,9 +286,116 @@ if (window.ethereum.networkVersion !== chainId) {
 			}
 	}
 
-	sendMail(){
+async sendMail(log,eventId){
+		console.log('lagggggg', log, eventId)
+		const fetch = require('node-fetch');
+	
+		const options = {
+			method:'POST',
+			headers:{
+				'Accept':'application/json',
+				'Content-Type': 'application/json',
+				"Access-Control-Expose-Headers": "Content-Length, X-JSON",
+				'Origin':'*',
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+				'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+				'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
+				'Access-control-allow-credentials':'true',							
+			},
+			
+			body:JSON.stringify({
+				message: {
+					to: {
+					  email: 'moonmusic91@gmail.com',
+					},
+					template: "8N689A8MG54A06JCZAD48WFA1W1Y",
+					data: {
+					  taker_name: this.state.taker,
+					  event_creator: this.state.creator_name,
+					  event_title: this.state.event_title,
+					  action_performed: this.state.action,
+					  item:this.state.item,
+					  ticket_quantity: this.state.quantity,
+					  event_link: 'https://shelter.services'+this.state.event_link,
+					  txHash:"https://rinkeby.etherscan.io/tx/" + log.transactionHash
+					},
+				  },
+			})
+		}
+		console.log(options)
+		fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
+		.then(response => response.json())
+		.then(response => console.log(response))
+
+		this.sendToUser(log,eventId)
+	}
+
+	async sendToUser(log,eventId){
+
+
+		const fetch = require('node-fetch');
+	
+		const options = {
+			method:'POST',
+			headers:{
+				'Accept':'application/json',
+				'Content-Type': 'application/json',
+				"Access-Control-Expose-Headers": "Content-Length, X-JSON",
+				'Origin':'*',
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+				'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+				'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
+				'Access-control-allow-credentials':'true',				
+				
+			},
+			
+			body:JSON.stringify({
+				message: {
+					to: {
+					  email: "moonmusic91@gmail.com",
+					},
+					template: "J6MPM3BRC3MZ16NYWR9MR9FZQN05",
+					data: {
+					  user_name: this.state.taker,
+					  event_creator: this.state.creator_name,
+					  event_title: this.state.event_title,
+					  action_performed: this.state.action,
+					  item:this.state.item,
+					  ticket_quantity: this.state.quantity,
+					  ticket_link: "https://shelter.services/validator/"+log.transactionHash+'/'+log.blockNumber +'/'+eventId,
+					  txHash: "https://rinkeby.etherscan.io/tx/" + log.transactionHash,
+					},
+				  },
+			})
+		}
+		console.log(options)
+		fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
+		.then(response => response.json())
+		.then(response => console.log(response))
 		
 	}
+
+	setMail = (creator_mail,creator_name,item,quantity,event_title,event_link,event_ticket,action,user_contact) =>{
+
+		this.setState({creator_mail:creator_mail,
+			creator_name:creator_name,
+			item:item,
+			quantity:quantity,
+			event_title:event_title,
+			event_link:event_link,
+			event_ticket:event_ticket,
+			action:action,
+			taker:this.state.accountDetails[0],
+			user_contact:user_contact
+		}
+		,()=>console.log())
+		//,()=>this.sendMail())
+
+		console.log('setting mail',creator_mail,creator_name,item,quantity,event_title,event_link,event_ticket,action)
+	}
+
 	render() {
 		
 
@@ -297,7 +416,6 @@ if (window.ethereum.networkVersion !== chainId) {
 			;
 			connecting = true;
 
-		  console.log('com',connecting)
 		} else if (this.props.web3.status === 'failed') {
 
 			body =
@@ -319,11 +437,11 @@ if (window.ethereum.networkVersion !== chainId) {
 
 			  body = 
 			  		<div>
-			  		<Route exact path="/" render={props => <LendAHand  {...props} account ={this.state.account}/>} />
-					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} /> }  />
-					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account}/>}  />
-					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} />}/>
-					<Route path="/give/:page/:id"  render={props => <PageGive {...props}/>}/>
+			  		<Route exact path="/" render={props => <LendAHand  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>} />
+					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/> }  />
+					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}  />
+					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
+					<Route path="/give/:page/:id"  render={props => <PageGive {...props} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
 					<Route path="/myprofile/" render={props => <MyProfile {...props} account={this.state.account}/>}/>
 					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
 					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
@@ -345,11 +463,11 @@ if (window.ethereum.networkVersion !== chainId) {
 		
 			body =
 				<div>
-					<Route exact path="/" render={props => <LendAHand  {...props} account ={this.state.account}/>} />
-					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} />}  />
-					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} />}  />
-					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} />}/>
-					<Route path="/give/:page/:id"  render={props => <PageGive {...props}/>}/>
+					<Route exact path="/" render={props => <LendAHand  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>} />
+					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}  />
+					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}  />
+					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
+					<Route path="/give/:page/:id"  render={props => <PageGive {...props} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
 					<Route path="/myprofile"  render={props => <MyProfile {...props} account={this.state.account}/>}/>
 					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
 					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
@@ -372,7 +490,7 @@ if (window.ethereum.networkVersion !== chainId) {
 			<Router>
 				
 				<div id="wrapper" className="toggled">
-					<Sidebar connection={!connecting} account={this.state.account} accountDetails = {this.state.accountDetails} connect = {this.loadBlockchainData} refresh = {this.refresh}/>
+					<Sidebar connection={!connecting} account={this.state.account} accountDetails = {this.state.accountDetails} connect = {this.loadBlockchainData} refresh = {this.refresh} setMail={this.setMail}/>
 			
 					<div id="page-content-wrapper" className="sidebar-open">
 						

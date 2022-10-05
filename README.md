@@ -30,6 +30,7 @@ One of the distrupting features of Shelter is the unique use of tickets. In Shel
 * Infura Web3 API - Blockchain Connection    <br/>
 * Infura IPFS API - IPFS Pinning/Connection    <br/>
 * IPFS - Decentralized storage   <br/>
+* Courier API - App to User Notification   <br/>
 
 
 ## Usage of Inter-planetary File System (IPFS)
@@ -41,8 +42,19 @@ This is to ensure that the data uploaded by the users of shelter are available a
 ![ReadPhoto](readphoto2.png)
 <br />
 
+## Usage of Courier API
+<br/>
+
+Shelter uses Courier API to notify Shelter members when certain interactions occurs.
+This includes whenever someone "donates" to a CALL-FOR-HELP,
+& whenever someone "takes" to a LEND-A-HAND.
+When a transaction confirms on the ethereum blockchain,
+The App will automtaically send two e-mails using Courier API
+to notify both the Organizer & the User with details of the transaction.
+<br />
+
 ## Local
-Try it on your Local.
+Try it on your Local & Contribute to the code by making pull requests.
 Clone or Download https://github.com/JanMooMoo/shelter.git
 In the project directory, you can run:
 
