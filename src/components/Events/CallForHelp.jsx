@@ -10,7 +10,7 @@ import Web3 from 'web3';
 import {Kadena_ABI, Kadena_Address} from '../../config/Kadena';
 
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
+const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://goerli.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
 
 class CallForHelp extends Component
 {
@@ -225,7 +225,9 @@ class CallForHelp extends Component
             id={this.state.needHelpActive[i].returnValues.eventId}
             ipfs={this.state.needHelpActive[i].returnValues.ipfs}
             owner={this.state.needHelpActive[i].returnValues.ownerNeed} 
-            account = {this.props.account}/>);
+            account = {this.props.account}
+            setMail={this.props.setMail}
+            accountDetails = {this.props.accountDetails}/>);
         }
         
 

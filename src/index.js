@@ -15,7 +15,7 @@ import {
 
 const options = {
 	web3:{
-		customProvider: new Web3(('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')),
+		customProvider: new Web3(('wss://goerli.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')),
 		
 	},
 	events: {
@@ -30,7 +30,7 @@ const options = {
 
 const aragon ={
 	options:{
-		network:4
+		network:5
 	},
 }
 //debugger;

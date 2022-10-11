@@ -76,7 +76,7 @@ render(){
     
         else body =
         <div className="dashboard-events-list">
-              {this.state.commited.map((taken,index)=>(<h4 className=" col-md-12 small" key={index}><strong>{taken.returnValues.receiver}</strong> took <a href={"https://rinkeby.etherscan.io/tx/" + taken.transactionHash} target="blank" className="gold">{taken.returnValues.received} {taken.returnValues.item}</a> from <strong onClick={()=>this.friendlyUrl(taken.returnValues.sender,taken.returnValues.tookFrom)}>{taken.returnValues.sender}</strong> <br/><span className="date-right small">on {this.parseDate(taken.returnValues.date)}</span></h4>
+              {this.state.commited.map((taken,index)=>(<h4 className=" col-md-12 small" key={index}><strong>{taken.returnValues.receiver}</strong> took <a href={"https://goerli.etherscan.io/tx/" + taken.transactionHash} target="blank" className="gold">{taken.returnValues.received} {taken.returnValues.item}</a> from <strong onClick={()=>this.friendlyUrl(taken.returnValues.sender,taken.returnValues.tookFrom)}>{taken.returnValues.sender}</strong> <br/><span className="date-right small">on {this.parseDate(taken.returnValues.date)}</span></h4>
                     ))}
   					          
               </div>

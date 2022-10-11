@@ -69,7 +69,7 @@ class PageNeed extends Component {
 
 	async loadblockhain(){
 
-	const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
+	const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://goerli.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
 	const Kadena =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
 
     if (this._isMounted){
@@ -321,7 +321,7 @@ class PageNeed extends Component {
 					
 
 					{this.state.load &&<Loading/>}
-                    {!this.state.commentView && this.state.pageTransactions.map((pledged,index)=>(<p className="sold_text col-md-12 small" key={index}><img className="float-left blockie" src={makeBlockie(pledged.returnValues.pledgedBy)} title={pledged.returnValues.pledgedBy} alt="blockie"/><strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.sender,pledged.returnValues.pledgedBy)}>{pledged.returnValues.sender}</strong> pledged <strong ><a href={"https://rinkeby.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.committed} {pledged.returnValues.item}</a></strong> to <strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.pledgeTo)}>{pledged.returnValues.receiver}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></p>
+                    {!this.state.commentView && this.state.pageTransactions.map((pledged,index)=>(<p className="sold_text col-md-12 small" key={index}><img className="float-left blockie" src={makeBlockie(pledged.returnValues.pledgedBy)} title={pledged.returnValues.pledgedBy} alt="blockie"/><strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.sender,pledged.returnValues.pledgedBy)}>{pledged.returnValues.sender}</strong> pledged <strong ><a href={"https://goerli.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.committed} {pledged.returnValues.item}</a></strong> to <strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.pledgeTo)}>{pledged.returnValues.receiver}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></p>
                     ))}
 
   					{!commits && !this.state.commentView && <p className="sold_text col-md-12 no-tickets">No one has pledged a single item.</p>}

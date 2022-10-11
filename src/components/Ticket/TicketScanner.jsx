@@ -70,7 +70,7 @@ class TicketScanner extends Component {
        // let hash =  this.props.match.params.hash;
         //let block = this.props.match.params.block;
 
-        const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
+        const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://goerli.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
         const Kadena =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
         this.setState({Shelter:Kadena})
         if (this._isMounted){

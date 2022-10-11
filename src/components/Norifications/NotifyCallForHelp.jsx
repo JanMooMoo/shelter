@@ -15,10 +15,10 @@ function NotifyCallForHelp(props) {
 	  let titleURL = "/need/"+pagetitle+"/" + props.eventId;
 	return (
 		<div className="notify">
-			<a href={"https://rinkeby.etherscan.io/tx/" + props.hash} title={props.hash} target = "blank">
+			<a href={"https://goerli.etherscan.io/tx/" + props.hash} title={props.hash} target = "blank">
 				<img src={makeBlockie(props.hash)} alt={props.hash} />
 			</a>
-			<a href={"https://rinkeby.etherscan.io/tx/" + props.hash} title={props.hash} target = "blank" className="notifyHeader">Call for help success!</a>
+			<a href={"https://goerli.etherscan.io/tx/" + props.hash} title={props.hash} target = "blank" className="notifyHeader">Call for help success!</a>
             <p className="mt-1">You have called for felp for {props.amount} {props.item}.</p>
             <Link to={titleURL}><p> Check it out here</p></Link>
 		</div>

@@ -74,7 +74,7 @@ render(){
     
         else body =
         <div className="dashboard-events-list">
-              {this.state.commited.map((pledged,index)=>(<h4 className="col-md-12 small" key={index}><strong>{pledged.returnValues.sender}</strong> pledged <a href={"https://rinkeby.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.committed} {pledged.returnValues.item}</a> to <strong onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.pledgeTo)}>{pledged.returnValues.receiver}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></h4>
+              {this.state.commited.map((pledged,index)=>(<h4 className="col-md-12 small" key={index}><strong>{pledged.returnValues.sender}</strong> pledged <a href={"https://goerli.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.committed} {pledged.returnValues.item}</a> to <strong onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.pledgeTo)}>{pledged.returnValues.receiver}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></h4>
                     ))}
   					          
               </div>

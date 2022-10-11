@@ -1,4 +1,5 @@
-var HDWalletProvider = require("truffle-hdwallet-provider");
+var HDWalletProvider = require("@truffle/hdwallet-provider");
+
 var config = require("./config.json");
 
 module.exports = {
@@ -8,11 +9,11 @@ module.exports = {
 			port: 7545,
 			network_id: "*"
 		},
-		rinkeby: {
+		goerli: {
 			provider: function () {
-				return new HDWalletProvider(config.wallet, "https://rinkeby.infura.io/v3/" + config.infura)
+				return new HDWalletProvider(config.wallet, "https://goerli.infura.io/v3/" + config.infura,0)
 			},
-			network_id: 4,
+			network_id: 5,
 			gas: 7000000,
 			solc: {
 				optimizer: {

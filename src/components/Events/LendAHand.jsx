@@ -10,7 +10,7 @@ import EventGive from './EventGive';
 import Web3 from 'web3';
 import {Kadena_ABI, Kadena_Address} from '../../config/Kadena';
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
+const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://goerli.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
 
 class LendAHand extends Component
 {

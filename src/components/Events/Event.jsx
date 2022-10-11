@@ -41,7 +41,7 @@ class Event extends Component {
 	}
 
 	async loadBlockchain(){
-	const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
+	const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://goerli.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
 	const Kadena =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
 
     if (this._isMounted){
@@ -138,6 +138,8 @@ class Event extends Component {
 				member = this.props.contracts['Shelter'].getMemberStatus[this.member].value;
 			}
 			event_data = this.props.contracts['Shelter'].callForHelpDetails[this.event].value;
+			let organizer = event_data.owner;
+
 			let image = this.getImage();
 			let description = this.getDescription();
 
@@ -216,9 +218,15 @@ class Event extends Component {
 					item = {event_data.item}
 					committed = {this.state.commits}
 					amount = {event_data.amount}
-					minimum = {event_data[6]}
 					account = {this.props.account}
+					minimum = {event_data[6]}
 					setMail = {this.props.setMail}
+					title = {event_data.title}
+					url={titleURL}
+					organizer={organizer}
+					contracts = {this.props.contracts}
+					accountDetails = {this.props.accountDetails}
+					
       				/>}
 					</div>
 					

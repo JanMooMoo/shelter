@@ -50,7 +50,7 @@ class AdminPage extends Component
   //Loads Blockhain Data,
   async loadBlockchain(){
    
-    const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));    
+    const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://goerli.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));    
     
     const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
     const blockNumber = await web3.eth.getBlockNumber();
@@ -63,7 +63,7 @@ class AdminPage extends Component
 
     
       
-      Kadena.events.Register({fromBlock:10022501, toBlock:'latest'}).on('data',(log)=>{
+      Kadena.events.Register({fromBlock:7750225, toBlock:'latest'}).on('data',(log)=>{
 
         this.setState({Registration:[...this.state.Registration,log]})
         var newest = this.state.Registration

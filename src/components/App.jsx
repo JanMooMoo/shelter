@@ -50,7 +50,7 @@ import { CourierClient } from "@trycourier/courier";
 
 let ethereum= window.ethereum;
 let web3=window.web3;
-let chainId = 3
+let chainId = 5
 
 class App extends Component
 {
@@ -124,7 +124,7 @@ async loadBlockchainData() {
 	 web3 = new Web3(ethereum);
 	 this.getAccount()
 
-	chainId = 4; // Rinkeby
+	chainId = 5; // Rinkeby
 
 if (window.ethereum.networkVersion !== chainId) {
       try {
@@ -142,7 +142,7 @@ if (window.ethereum.networkVersion !== chainId) {
                 chainName: 'Rinkeby Test Network',
                 chainId: web3.utils.toHex(chainId),
                 nativeCurrency: { name: 'RinkebyETH', decimals: 18, symbol: 'ETH' },
-                rpcUrls: ['https://rinkeby.infura.io/v3/']
+                rpcUrls: ['https://goerli.infura.io/v3/']
               }
             ]
           });
@@ -172,7 +172,7 @@ if (window.ethereum.networkVersion !== chainId) {
 	 
 
  	else{console.log('No Web3 Detected')
- 	window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
+ 	window.web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.infura.io/v3/72e114745bbf4822b987489c119f858b'));
 	}
 
 
@@ -318,7 +318,7 @@ async sendMail(log,eventId){
 					  item:this.state.item,
 					  ticket_quantity: this.state.quantity,
 					  event_link: 'https://shelter.services'+this.state.event_link,
-					  txHash:"https://rinkeby.etherscan.io/tx/" + log.transactionHash
+					  txHash:"https://goerli.etherscan.io/tx/" + log.transactionHash
 					},
 				  },
 			})
@@ -365,7 +365,7 @@ async sendMail(log,eventId){
 					  item:this.state.item,
 					  ticket_quantity: this.state.quantity,
 					  ticket_link: "https://shelter.services/validator/"+log.transactionHash+'/'+log.blockNumber +'/'+eventId,
-					  txHash: "https://rinkeby.etherscan.io/tx/" + log.transactionHash,
+					  txHash: "https://goerli.etherscan.io/tx/" + log.transactionHash,
 					},
 				  },
 			})
@@ -429,7 +429,7 @@ async sendMail(log,eventId){
 			connecting = true;
 		} else if(
 				(this.props.web3.status === 'initialized' && Object.keys(this.props.accounts).length === 0) ||
-				(process.env.NODE_ENV === 'production' && this.props.web3.networkId !== 4)
+				(process.env.NODE_ENV === 'production' && this.props.web3.networkId !== 5)
 				)
 			{
 
@@ -510,7 +510,7 @@ async sendMail(log,eventId){
 								</div>
 							</div>
 						</div>
-					</div>
+					</div>	
 					<ToastContainer />
 
 				</div>
