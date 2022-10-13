@@ -319,6 +319,7 @@ class CreateEvent extends Component {
 			this.state.ipfs)
 
 		this.transactionChecker(id)
+		
 		//this.setRedirect();
 	}
 
@@ -341,6 +342,7 @@ class CreateEvent extends Component {
 				clearInterval(tx_checker);
 			}
 		}, 100);
+		
 	}
 
 	stageUpdater = (max) => {
@@ -383,7 +385,7 @@ class CreateEvent extends Component {
 				<Loader progress={this.state.stage} text={this.state.title} /> :
 				<React.Fragment>
 					<div className="row">
-							<Form registerHospital={this.registerHospital} account={this.props.account} />
+							<Form registerHospital={this.registerHospital} account={this.props.account} setApplication={this.props.setApplication}/>
 					</div>
 				</React.Fragment>
 		;

@@ -242,9 +242,6 @@ class Sidebar extends Component
 							<NavLink to="/mytickets" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-ticket-alt" title="List of Members"></i> <span className="toggleHidden"> My Tickets</span></NavLink>
 						</li>
 
-						<li>
-							<NavLink to="/scanner" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-edit"  title="Edit"></i> <span className="toggleHidden">Ticket Scanner</span></NavLink>
-						</li>
 
 						<li>
 							<NavLink to="/register" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-edit"  title="Edit"></i> <span className="toggleHidden">Register/Create Post</span></NavLink>

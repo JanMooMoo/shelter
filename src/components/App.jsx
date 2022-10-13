@@ -75,6 +75,9 @@ class App extends Component
 			event_ticket:'',
 			action:'',
 			user_contact:'',
+			//
+			applicantMail:'',
+			applicantName:'',
 
 		};
 		this.loadBlockchainData = this.loadBlockchainData.bind(this);
@@ -203,6 +206,8 @@ if (window.ethereum.networkVersion !== chainId) {
 					pauseOnHover: true
 
 				});
+
+				this.sendRegister()
 			}
 			if(log.returnValues.pledgedBy === this.state.account){
 
@@ -286,6 +291,50 @@ if (window.ethereum.networkVersion !== chainId) {
 			}
 	}
 
+
+setApplication = (applicant, mail) =>{
+this.setState({applicantName:applicant,applicantMail:mail},()=>console.log())
+}
+
+async sendRegister(){
+	const fetch = require('node-fetch');
+
+	const options = {
+		method:'POST',
+		headers:{
+			'Accept':'application/json',
+			'Content-Type': 'application/json',
+			"Access-Control-Expose-Headers": "Content-Length, X-JSON",
+			'Origin':'*',
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+			'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
+			'Access-control-allow-credentials':'true',							
+		},
+		
+		body:JSON.stringify({
+			message: {
+				to: {
+				  email: this.state.applicantMail,
+				},
+				template: "A9FM8HKFG24N0VME590VW30JSRBX",
+				data: {
+				  registrant: this.state.applicantName,
+				},
+			  },
+		})
+	}
+	console.log(options)
+	fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
+	.then(response => response.json())
+	.then(response => console.log(response))
+}
+
+
+
+
+
 async sendMail(log,eventId){
 		console.log('lagggggg', log, eventId)
 		const fetch = require('node-fetch');
@@ -307,7 +356,7 @@ async sendMail(log,eventId){
 			body:JSON.stringify({
 				message: {
 					to: {
-					  email: 'moonmusic91@gmail.com',
+					  email: this.state.creator_mail,
 					},
 					template: "8N689A8MG54A06JCZAD48WFA1W1Y",
 					data: {
@@ -354,7 +403,7 @@ async sendMail(log,eventId){
 			body:JSON.stringify({
 				message: {
 					to: {
-					  email: "moonmusic91@gmail.com",
+					  email: this.state.user_contact,
 					},
 					template: "J6MPM3BRC3MZ16NYWR9MR9FZQN05",
 					data: {
@@ -445,7 +494,6 @@ async sendMail(log,eventId){
 					<Route path="/myprofile/" render={props => <MyProfile {...props} account={this.state.account}/>}/>
 					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
 					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
-					<Route path="/scanner" render={props => <TicketScanner {...props} account={this.state.account}/>}/>
 					<Route path="/member/:page/:id"  render={props => <MemberProfile {...props}/>}/>
 					<Route path="/member-list"  render={props => <MemberList {...props}/>}/>
 					<Route path="/dao"  render={props => <DaoPage {...props} account={this.state.account}/>}/>
@@ -471,11 +519,10 @@ async sendMail(log,eventId){
 					<Route path="/myprofile"  render={props => <MyProfile {...props} account={this.state.account}/>}/>
 					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
 					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
-					<Route path="/scanner" render={props => <TicketScanner {...props} account={this.state.account}/>}/>
 					<Route path="/member/:page/:id"  render={props => <MemberProfile {...props}/>}/>
 					<Route path="/member-list"  render={props => <MemberList {...props}/>}/>
 					<Route path="/dao"  render={props => <DaoPage {...props} account={this.state.account}/>}/>
-					<Route path="/register" render={props=><CreateEvent  {...props}
+					<Route path="/register" render={props=><CreateEvent  {...props} setApplication={this.setApplication}
 					account ={this.state.account}/>}/>
 					<Route path="/requirements" component={Requirements} />
 					<Route path="/about" component={About} />

@@ -147,6 +147,7 @@ class Form extends Component {
 				this.state.contact,
 				this.state.file,
 			);
+			this.props.setApplication(this.state.title,this.state.contact)
 		}
 	}
 
