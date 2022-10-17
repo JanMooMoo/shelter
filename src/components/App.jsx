@@ -327,7 +327,8 @@ async sendRegister(){
 		})
 	}
 	console.log(options)
-	fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
+	fetch('https://api.courier.com/send',options)
+    //fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
 	.then(response => response.json())
 	.then(response => console.log(response))
 }
@@ -373,7 +374,7 @@ async sendMail(log,eventId){
 			})
 		}
 		console.log(options)
-		fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
+		fetch('https://api.courier.com/send',options)
 		.then(response => response.json())
 		.then(response => console.log(response))
 
@@ -420,7 +421,7 @@ async sendMail(log,eventId){
 			})
 		}
 		console.log(options)
-		fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
+		fetch('https://api.courier.com/send',options)
 		.then(response => response.json())
 		.then(response => console.log(response))
 		
