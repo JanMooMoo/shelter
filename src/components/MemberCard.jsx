@@ -97,6 +97,7 @@ class MemberCard extends Component {
     }
 
 	async message(){
+
 		const fetch = require('node-fetch');
 
 		let body = 'Vlad Churov has taken 3 Shelter Tickets from Free Apartment Accommodation';
@@ -114,13 +115,9 @@ class MemberCard extends Component {
 				'Access-Control-Allow-Origin': '*',
 				'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
 				'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-				'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
+				'Authorization':process.env.REACT_APP_COURIER_KEY,
 				'Access-control-allow-credentials':'true',
 				
-				
-				
-
-
 				
 			},
 			
@@ -145,46 +142,6 @@ class MemberCard extends Component {
 		fetch('https://cors-anywhere.herokuapp.com/https://api.courier.com/send',options)
 		.then(response => response.json())
 		.then(response => console.log(response))
-
-
-		/*
-      1) Install Courier SDK: npm install @trycourier/courier
-      2) Make sure you allow ES module imports: Add "type": "module" to package.json file 
-      */
-
-	
-    /*var ourRequest = new XMLHttpRequest();
-	//  var url = bURL + endpoint + '?' + dataQueryString + '&signature=' + signature;
-	var url = 'https://api.courier.com/send/pk_prod_VF6RD316WTM752MYV3QVY84EPNHT';
-
-	ourRequest.open('POST',url,true);
-	    ourRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
-
-	ourRequest.send();*/
-	
-     /* const courier = CourierClient(
-        { authorizationToken: "PK_PROD_VF6RD316WTM752MYV3QVY84EPNHT"});
-		xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-      const { requestId } = await courier.send({
-		
-        message: {
-          content: {
-            title: "Welcome to Courier!",
-            body: "Want to hear a joke?"
-          },
-          data: {
-            recipientName: "Why was the JavaScript developer sad? Because they didn't Node how to Express themselves"
-          },
-          to: {
-            email: "moonmusic91@gmail.com"
-          },
-		  template: "8N689A8MG54A06JCZAD48WFA1W1Y",
-        },
-		routing: {
-			method: "single",
-			channels: ["email"],
-		  },
-      });*/
 
 
 	  console.log('sent')
@@ -246,8 +203,7 @@ class MemberCard extends Component {
 			<div className="mt-2">
 				<h3><i class="fas fa-hospital-user ml-4"/> Oganizer Profile</h3>
                 <p className="small text-truncate ml-1" ><strong>Shelter Member Since: {memberSince}</strong></p>
-				<button className="small text-truncate ml-1" onClick={()=>this.message()}>Send</button>
-
+			
 				<hr />
 				{body}
 			</div>

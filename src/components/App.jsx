@@ -87,6 +87,7 @@ class App extends Component
 
 	componentDidMount(){
 		this.loadBlockchainData()
+
 	}
 
 	componentWillUpdate() {
@@ -309,7 +310,7 @@ async sendRegister(){
 			'Access-Control-Allow-Origin': '*',
 			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
 			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-			'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
+			'Authorization':process.env.REACT_APP_COURIER_KEY,
 			'Access-control-allow-credentials':'true',							
 		},
 		
@@ -336,7 +337,6 @@ async sendRegister(){
 
 
 async sendMail(log,eventId){
-		console.log('lagggggg', log, eventId)
 		const fetch = require('node-fetch');
 	
 		const options = {
@@ -349,7 +349,7 @@ async sendMail(log,eventId){
 				'Access-Control-Allow-Origin': '*',
 				'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
 				'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-				'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
+				'Authorization':process.env.REACT_APP_COURIER_KEY,
 				'Access-control-allow-credentials':'true',							
 			},
 			
@@ -395,7 +395,7 @@ async sendMail(log,eventId){
 				'Access-Control-Allow-Origin': '*',
 				'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
 				'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-				'Authorization':'Bearer pk_prod_VF6RD316WTM752MYV3QVY84EPNHT',
+				'Authorization':process.env.REACT_APP_COURIER_KEY,
 				'Access-control-allow-credentials':'true',				
 				
 			},
