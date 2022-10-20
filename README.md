@@ -1,5 +1,5 @@
 
-## Kyiv Tech Summit Hackathon Deliverables
+## Kyiv Tech Summit 
 
 1. Website <br />
 * [Try it on traditional website](https://shelter.services) <br />
@@ -8,12 +8,13 @@
 2. Videos <br />
 * [Watch the presentation](https://youtu.be/4S_hRp-6A5k) <br />
 * [Watch the IPFS Demo](https://youtu.be/o7eD2ZSegaU) <br />
+* [Watch the Courier Demo](https://www.youtube.com/watch?v=IHcFzBsdCZ0&t=74s) <br />
 
 ## About Shelter
-Shelter is a secure, immutable & decentralized donation platform that aims to maximize the reach & further improve the impact of our humanitarian relief effort. It uses a BLOCKCHAIN-BASED TICKETING SYSTEM that lets refugees & people affected by the war in Ukraine connect,exchange & get donations directly from people that wants to help.
+Shelter is a secure, immutable & decentralized donation platform that aims to maximize the reach & further improve the impact of our humanitarian relief effort. It uses a BLOCKCHAIN-BASED TICKETING SYSTEM that enables refugees & people affected by the war in Ukraine connect,exchange & get donations directly from people that wants to help.
 <br />
 <br />
-One of the distrupting features of Shelter is the unique use of tickets. In Shelter, tickets are used primarily to exchange not only goods & items essential to the victims of war, but also services amongst its members. Event organizers could also use shelter to make humanitarian events such as food programs, online medical consultation & community events & leverage the secure & immutable ticketing system of the platform.
+One of the distrupting features of Shelter is the unique use of tokeniation & tickets. In Shelter, tickets are used primarily to exchange not only goods & items essential to the victims of war, but also services amongst its members. Event organizers could also use shelter to make humanitarian events such as food programs, online medical consultation & community events & leverage the secure & immutable ticketing system of the platform.
 
 
 
@@ -42,15 +43,18 @@ This is to ensure that the data uploaded by the users of shelter are available a
 ![ReadPhoto](readphoto2.png)
 <br />
 
-## Usage of Courier API
-<br/>
+## Courier API Integration
+
+* [Watch the Courier Demo](https://www.youtube.com/watch?v=IHcFzBsdCZ0&t=74s) <br />
 
 Shelter uses Courier API to notify Shelter members when certain interactions occurs.
 This includes whenever someone "donates" to a CALL-FOR-HELP,
 & whenever someone "takes" to a LEND-A-HAND.
 When a transaction confirms on the ethereum blockchain,
-The App will automtaically send two e-mails using Courier API
-to notify both the Organizer & the User with details of the transaction.
+The App will automtaically send e-mail notifications using Courier API
+to notify all parties involved in a transaction.
+<br />
+![ReadPhoto](readphoto3.png)
 <br />
 
 ## Local
