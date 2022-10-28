@@ -490,8 +490,8 @@ async sendMail(log,eventId){
 			  		<Route exact path="/" render={props => <LendAHand  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>} />
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/> }  />
 					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}  />
-					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
-					<Route path="/give/:page/:id"  render={props => <PageGive {...props} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
+					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
+					<Route path="/give/:page/:id"  render={props => <PageGive {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
 					<Route path="/myprofile/" render={props => <MyProfile {...props} account={this.state.account}/>}/>
 					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
 					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>
@@ -515,8 +515,8 @@ async sendMail(log,eventId){
 					<Route exact path="/" render={props => <LendAHand  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>} />
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}  />
 					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}  />
-					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
-					<Route path="/give/:page/:id"  render={props => <PageGive {...props} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
+					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
+					<Route path="/give/:page/:id"  render={props => <PageGive {...props} account ={this.state.account} setMail={this.setMail} accountDetails = {this.state.accountDetails}/>}/>
 					<Route path="/myprofile"  render={props => <MyProfile {...props} account={this.state.account}/>}/>
 					<Route path="/mytickets" render={props => <MyTickets {...props} account={this.state.account}/>}/>
 					<Route path="/validator/:hash/:block/:id" render={props => <TicketValidator {...props} account={this.state.account}/>}/>

@@ -40,6 +40,7 @@ class PageGive extends Component {
       super(props);
 		  this.contracts = context.drizzle.contracts;
           this.event = this.contracts['Shelter'].methods.provideAssistanceDetails.cacheCall(this.props.match.params.id);
+		 
 		  this.state = {
 			  load:true,
 			  loading: false,
@@ -288,8 +289,9 @@ class PageGive extends Component {
 					item = {event_data.item}
 					committed = {this.state.commits}
 					amount = {event_data.amount}
+					account = {this.props.account}
 					minimum = {event_data[6]}
-
+		
 					setMail = {this.props.setMail}
 					title = {event_data.title}
 					url={'/give/'+this.props.match.params.page +'/'+this.props.match.params.id}

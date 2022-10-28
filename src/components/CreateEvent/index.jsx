@@ -428,7 +428,7 @@ class CreateEvent extends Component {
 				{disabled && <div className = "row alert-connection col-lg-6 mb-6">
 				<div className="connection-box">
                     <p className="mt-1 mb-1">
-                    <span role="img" aria-label="halt">⚠️ You are on VIEW ONLY mode. You won't be able to submit because you are not connected to a network.</span>
+                    <span role="img" aria-label="halt">⚠️ You are on VIEW ONLY mode. You won't be able to submit because you are not connected to the blockchain network. Please see requirements page.</span>
                     </p>
                 </div>	
 				</div>}

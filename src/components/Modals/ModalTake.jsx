@@ -3,6 +3,9 @@ import {Modal} from 'react-bootstrap';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import ipfs from '../../utils/ipfs';
+import NotifyConnection from '../Norifications/NotifyConnection';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 export class ModalTake extends Component{
 
@@ -121,8 +124,20 @@ constructor(props,context){
 }
 
 take = ()=>{
-    this.contracts['Shelter'].methods.take.cacheSend(this.props.id,this.state.amount)
-    this.setMail()
+    if(this.props.account.length !== 0){
+      this.contracts['Shelter'].methods.take.cacheSend(this.props.id,this.state.amount)
+      this.setMail()
+
+    }
+    else{
+    return toast(<NotifyConnection />, 
+      {
+      position: "bottom-right",
+      autoClose: true,
+      pauseOnHover: true
+
+    });
+    }
     }
   
   
